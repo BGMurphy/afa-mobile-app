@@ -1,3 +1,5 @@
+require('./settingTimerErrorWorkaround.js');
+
 import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import firebase from 'firebase';
