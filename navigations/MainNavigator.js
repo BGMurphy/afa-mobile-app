@@ -82,17 +82,17 @@ const SurveyStack = createStackNavigator(
   }
 );
 
-const AppStack = createStackNavigator({
-  Tab: {
-    screen: TabNavigator
-  }, Survey: {
-    screen: SurveyStack, 
-  }, Calendar: {
-    screen: CalendarScreen
-  }
-},{
-  defaultNavigationOptions: {
-    header: null
+const AppStack = createStackNavigator(
+  {
+    Tab: {
+      screen: TabNavigator
+    },
+    Survey: {
+      screen: SurveyStack
+    },
+    Calendar: {
+      screen: CalendarScreen
+    }
   },
   {
     defaultNavigationOptions: {
