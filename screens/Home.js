@@ -71,6 +71,7 @@ export default class Home extends React.Component {
 
         <FlatList
           data={this.state.programs}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) =>
             <Text
               onPress={this.makeSelectProgram(index)}>{item.name}</Text>}
