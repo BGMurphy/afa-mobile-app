@@ -38,20 +38,21 @@ export default class SignUp extends React.Component {
     super(props);
 
     this.state = {
+      name: '',
       email: '',
       password: ''
     };
   }
 
   handleSignUp = () => {
-    const { email, password } = this.state;
+    const { name, email, password } = this.state;
 
     // Signup with firebase
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(user => {
-        this.setState({ email: '', password: '' });
+        this.setState({ name: '', email: '', password: '' });
         alert('success');
         // Move after Signup
       })
@@ -97,6 +98,15 @@ export default class SignUp extends React.Component {
 
               <Form style={styles.form}>
                 <ItemWrapper contentContainerStyle={{ alignItems: 'center' }}>
+                  <Item rounded style={styles.item}>
+                    <Input
+                      placeholder="Full Name"
+                      autoCapitalize={'none'}
+                      autoCorrect={false}
+                      onChangeText={name => this.setState({ name })}
+                      style={{ fontSize: 16 }}
+                    />
+                  </Item>
                   <Item rounded style={styles.item}>
                     <Input
                       placeholder="Email"
