@@ -6,7 +6,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from '../screens/Home';
 import LoadingScreen from '../screens/Loading';
 import SettingsScreen from '../screens/SettingsScreen';
-import SurveyScreen from '../screens/SurveyScreen';
+import SurveyScreen from '../screens/Survey';
+import CalendarScreen from '../screens/CalendarScreen';
 import SignUpScreen from '../screens/SignUp';
 import TabBarIcon from '../components/TabBarIcon';
 import QuizScreen from '../screens/Quiz';
@@ -81,14 +82,17 @@ const SurveyStack = createStackNavigator(
   }
 );
 
-const AppStack = createStackNavigator(
-  {
-    Tab: {
-      screen: TabNavigator
-    },
-    Survey: {
-      screen: SurveyStack
-    }
+const AppStack = createStackNavigator({
+  Tab: {
+    screen: TabNavigator
+  }, Survey: {
+    screen: SurveyStack, 
+  }, Calendar: {
+    screen: CalendarScreen
+  }
+},{
+  defaultNavigationOptions: {
+    header: null
   },
   {
     defaultNavigationOptions: {
