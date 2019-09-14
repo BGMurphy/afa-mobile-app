@@ -49,7 +49,7 @@ export default class Home extends React.Component {
   makeSelectProgram(index) {
     return () => {
       const { programs } = this.state;
-      this.props.navigation.navigate('Survey', {
+      this.props.navigation.navigate('Calendar', {
         programId: programs[index].id
       })
     }
