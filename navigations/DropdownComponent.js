@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight, Picker } from 'react-native';
 import {
   Container,
   Header,
@@ -23,23 +23,35 @@ let width = Dimensions.get('window').width;
 // look up
 // https://github.com/oblador/react-native-progress
 export default class TextComponent extends React.Component {
+  static defaultProps = {
+    value:""
+  }
+
   constructor(props) {
     super(props);
 
-    this.state = {
-      uid: '',
-      currentUser: null,
-    };
 
   }
 
   render() {
+    console.log(this.props.options)
+    let options = this.props.options.map( (s, i) => {
+      return <Picker.Item key={i} value={s} label={s} />
+    });
     return (
       <View>
         
         <Text>
           DROPDOWN GOES HERE
         </Text>
+
+        <Picker
+          selectedValue={this.props.value}
+          onValueChange={ (service) => ( this.props.onSetValue(service) ) } >
+
+          {options}
+
+        </Picker>
 
       </View>
     );

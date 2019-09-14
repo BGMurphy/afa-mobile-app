@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight } from 'react-native';
 import TextComponent from '../navigations/TextComponent';
 import DropdownComponent from '../navigations/DropdownComponent';
+import CalendarComponent from '../navigations/CalendarComponent';
 import {
   Container,
   Header,
@@ -30,12 +31,19 @@ let questions = [
   {
     "qid" : "2",
     "text" : "QUESTION2",
-    "type" : "dropdown"
+    "type" : "dropdown",
+    "options" : ['yes', 'no'],
   },
   {
     "qid" : "3",
     "text" : "QUESTION3",
-    "type" : "dropdown"
+    "type" : "dropdown",
+    "options" : ['yes', 'no', 'maybe', 'SHANYUUU'],
+  },
+  {
+    "qid" : "4",
+    "text" : "QUESTION4",
+    "type" : "calendar"
   },
 ];
 
@@ -52,7 +60,8 @@ export default class Home extends React.Component {
       questionNumber: 0,
       numQuestions: questions.length,
       progressBar: 1 / questions.length,
-      questions: questions
+      questions: questions,
+      answers:new Array(questions.length)
 
     };
 
@@ -60,6 +69,7 @@ export default class Home extends React.Component {
     this.responseType = this.responseType.bind(this);
     // this.handleSignOut = this.handleSignOut.bind(this);
     // this.saveMobile = this.saveMobile.bind(this);
+    this.makeOnSetValue = this.makeOnSetValue.bind(this)
   }
 
   //componentDidMount() {
@@ -96,24 +106,36 @@ export default class Home extends React.Component {
   //   }
   // }
 
+  makeOnSetValue(index) {
+    return (value) => {
+      this.setState(state => { 
+        let updatedAnswers = state.answers;
+        updatedAnswers[index] = value;
+        return {answers: updatedAnswers}
+      })
+    }
+  }
+
   next() {
-    this.setState({
-      questionNumber: this.state.questionNumber + 1,
-    });
+    if(this.state.questionNumber + 2 <= this.state.numQuestions) {
+      this.setState({
+        questionNumber: this.state.questionNumber + 1,
+      });
+    }
     this.setState({
       progressBar: (this.state.questionNumber + 2) / this.state.numQuestions
     });
     console.log(this.state.questionNumber)
-    console.log(this.state.numQuestions)
-    console.log(this.state.progressBar)
   }
 
-  responseType() {
+  responseType(questionIndex) {
 
-    if(this.state.questions[this.state.questionNumber].type == "text") {
+    if(this.state.questions[questionIndex].type == "text") {
       return <TextComponent />
+    } else if(this.state.questions[questionIndex].type == "dropdown") {
+      return <DropdownComponent onSetValue={this.makeOnSetValue(questionIndex)} value={this.state.answers[questionIndex]} options={this.state.questions[questionIndex].options}/>
     } else {
-      return <DropdownComponent />
+      return <CalendarComponent />
     }
 
   }
@@ -128,7 +150,7 @@ export default class Home extends React.Component {
           {this.state.questionObject[this.state.questionNumber].text}
         </Text>
 
-        {this.responseType()}
+        {this.responseType(this.state.questionNumber)}
 
         <TouchableHighlight
           onPress={this.next}
