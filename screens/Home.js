@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import {
   Container,
   Header,
@@ -23,81 +23,58 @@ export default class Home extends React.Component {
     super(props);
 
     this.state = {
-      uid: '',
-      mobile: '',
-      mobileForm: '',
-      currentUser: null
+      currentUser: {},
+      programs: [
+        {
+          id: 0,
+          name: 'Aqua Blast',
+          img: '...'
+        },
+        {
+          id: 1,
+          name: 'Aqua Vision',
+          img: '...'
+        }
+      ]
     };
 
-    this.handleSignOut = this.handleSignOut.bind(this);
-    this.saveMobile = this.saveMobile.bind(this);
   }
 
   componentDidMount() {
     const { currentUser } = firebase.auth();
-    this.setState({ currentUser });
-    // Get User Credentials
-    let user = firebase.auth().currentUser;
-    // Listen for mobile number changes
-    Database.listenUserMobile(user.uid, mobileNumber => {
-      this.setState({
-        mobile: mobileNumber,
-        mobileForm: mobileNumber
-      });
-    });
-
-    this.setState({
-      uid: user.uid
-    });
+    console.log('currentUser', currentUser)
+    this.setState({ currentUser })
   }
-  handleSignOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(result => alert('sign out success'))
-      .catch(error => console.error(error));
-  };
 
-  saveMobile() {
-    // Set Mobile
-    if (this.state.uid && this.state.mobileForm) {
-      Database.setUserMobile(this.state.uid, this.state.mobileForm);
+  makeSelectProgram(index) {
+    return () => {
+      const { programs } = this.state;
+      this.props.navigation.navigate('Survey', {
+        programId: programs[index].id
+      })
     }
   }
 
   render() {
-    const { currentUser } = this.state;
+    const {currentUser} = this.state;
     return (
       <View style={styles.container}>
-        <Progress.Bar progress={0.3} width={200} />
         <Text>
           Hi{' '}
           <Text style={{ fontSize: 20, color: '#0818A8' }}>
             {currentUser && currentUser.email}!
           </Text>
         </Text>
-        <Text>Hello UserId: {this.state.uid}</Text>
-        <Text>Mobile Number (From Database): {this.state.mobile}</Text>
-        <Input
-          placeholder="Phone Number"
-          autoCapitalize={'none'}
-          autoCorrect={false}
-          onChangeText={mobileForm => this.setState({ mobileForm })}
-          style={{ fontSize: 16 }}
-        />
-        <Button onPress={this.saveMobile}>
-          <Text>Save</Text>
-        </Button>
+        <Text>
+          Our Programs:
+        </Text>
 
-        <Button
-          style={styles.signOutButton}
-          full
-          rounded
-          color="#e93766"
-          onPress={this.handleSignOut}
-        >
-          <Text style={{ color: 'white', textAlign: 'center' }}>Sign Out</Text>
-        </Button>
+        <FlatList
+          data={this.state.programs}
+          renderItem={({ item, index }) =>
+            <Text
+              onPress={this.makeSelectProgram(index)}>{item.name}</Text>}
+        />
       </View>
     );
   }
