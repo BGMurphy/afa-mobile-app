@@ -54,7 +54,7 @@ export default class Home extends React.Component {
     super(props);
 
     this.state = {
-      uid: '',
+      uid: this.props.navigation.getParam('surveyId', 0),
       currentUser: null,
       questionObject: questions,
       questionNumber: 0,
@@ -144,6 +144,7 @@ export default class Home extends React.Component {
     const { currentUser } = this.state;
     return (
       <View style={styles.container}>
+        <Text>Survey Id: {this.state.uid}</Text>
         <Progress.Bar progress={this.state.progressBar} width={200} />
         <Text>
           {this.state.questionObject[this.state.questionNumber].text}
