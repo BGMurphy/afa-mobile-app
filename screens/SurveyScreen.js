@@ -1,20 +1,16 @@
 import React from 'react';
 import { View } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text} from 'react-native';
 import firebase from 'firebase';
 
 export default class SettingsScreen extends React.Component {
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      // console.log(this.props);
-      this.props.navigation.navigate(user ? 'Home' : 'SignUp');
-    });
-  }
 
   render() {
+    const {navigation} = this.props;
+    const programId = navigation.getParam('programId', 'noProgramId');
     return (
       <View style={styles.container}>
-        <Text>Some survey stuff</Text>
+        <Text>Program Id: {programId}</Text>
       </View>
     );
   }
