@@ -3,7 +3,7 @@ import { View } from 'native-base';
 import { StyleSheet, Text} from 'react-native';
 import firebase from 'firebase';
 
-export default class SettingsScreen extends React.Component {
+export default class CalendarScreen extends React.Component {
 
   render() {
     const {navigation} = this.props;
