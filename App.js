@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import firebase from 'firebase';
 import firebaseConfig from './config/firebase';
-import AuthenticationNavigator from './navigations/AuthenticationNavigator';
+import MainNavigator from './navigations/MainNavigator';
 import * as Font from 'expo-font';
 
 firebase.initializeApp(firebaseConfig);
@@ -26,8 +26,8 @@ export default class App extends React.Component {
       return <ActivityIndicator />;
     } else {
       return (
-        <View style={styles.container}>
-          <AuthenticationNavigator />
+        <View style={{ flex: 1 }}>
+          <MainNavigator />
         </View>
       );
     }
