@@ -27,6 +27,7 @@ import Database from '../config/database';
 import firebase from 'firebase';
 import { LinearGradient } from 'expo-linear-gradient';
 import Dimensions from 'Dimensions';
+import getResponsesInCsv from '../utils/firebaseUtils';
 const HeaderColor = ['#0818A8', '#024FA8', '#2E96C7'];
 const Color = ['#531CBA', '#0818A8', '#024FA8'];
 let ScreenHeight = Dimensions.get('window').height;
@@ -70,7 +71,8 @@ export default class Home extends React.Component {
 
   componentDidMount() {
     const { currentUser } = firebase.auth();
-    //console.log('currentUser', currentUser);
+    console.log('currentUser', currentUser);
+    // getResponsesInCsv('test1');
     this.setState({ currentUser });
     if (currentUser.email == 'admin@test.com') {
       this.setState({userIsAdmin: true} )
@@ -345,6 +347,8 @@ const styles = StyleSheet.create({
   },
   adminSurveySelector: {
     height: ScreenHeight * 0.4,
+    width: ScreenWidth * 0.4,
+    marginBottom: 20,
     width: ScreenWidth * 0.4
   }
 });
