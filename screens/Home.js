@@ -193,6 +193,7 @@ export default class Home extends React.Component {
                   </LinearGradient>
                 </TouchableHighlight>
                 <Button
+                  onPress={getResponsesInCsv('test1')}
                   rounded
                   style={{
                     marginTop: 10,
@@ -233,6 +234,7 @@ export default class Home extends React.Component {
                   </LinearGradient>
                 </TouchableHighlight>
                 <Button
+                  onPress={getResponsesInCsv('test1')}
                   rounded
                   style={{
                     marginTop: 10,

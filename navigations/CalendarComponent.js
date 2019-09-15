@@ -49,8 +49,7 @@ export default class CalendarComponent extends React.Component {
             },
           }}
           style={{
-            borderWidth: 0.5,
-            borderColor: '#d6d7da',
+            // borderColor: '#d6d7da',
             borderRadius: 10
           }}
         />
