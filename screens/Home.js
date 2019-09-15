@@ -76,6 +76,13 @@ export default class Home extends React.Component {
     };
   }
 
+  selectColor(name) {
+    if(name == "Aqua Blast") {
+      return ['#0818A8', '#024FA8', '#2E96C7'];
+    } else {
+      return ['#531CBA', '#0818A8', '#024FA8'];
+    }
+  }
 
 
   render() {
@@ -121,7 +128,7 @@ export default class Home extends React.Component {
                   source={iconPaths[item.name]}
                   style={styles.img}
                 >
-                  <LinearGradient colors={Color} style={styles.gradientCard}>
+                  <LinearGradient colors={this.selectColor(item.name)} style={styles.gradientCard}>
                     <View
                       style={{
                         width: ScreenWidth - 20,
