@@ -116,7 +116,7 @@ export default class Home extends React.Component {
     let visionCount = 0;
     let blastCount = 0;
     let visionResponses = [];
-    let blastResponses = []
+    let blastResponses = [];
     for (let responseKey in responses) {
       if (responses[responseKey].programId == 'program1') {
         visionCount += 1;
@@ -163,7 +163,14 @@ export default class Home extends React.Component {
                 Data Management
               </Text>
             </LinearGradient>
-            <Text style={{ color: '#000', fontSize: 18, marginLeft: 10 }}>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: 18,
+                marginLeft: 10,
+                marginBottom: 10
+              }}
+            >
               Welcome,{' '}
               <Text style={{ color: '#0818A8', fontSize: 24 }}>admin</Text>!
               {'\n'}You can view responses from the following surveys:
@@ -181,9 +188,11 @@ export default class Home extends React.Component {
                 <TouchableHighlight
                   onPress={() => {
                     console.log('AV Press');
-                    this.setState({adminDataView: this.state.surveyCounts.visionResponses})
+                    this.setState({
+                      adminDataView: this.state.surveyCounts.visionResponses
+                    });
                   }}
-                  >
+                >
                   <LinearGradient
                     colors={['#531CBA', '#0818A8', '#024FA8']}
                     style={styles.box}
@@ -209,7 +218,7 @@ export default class Home extends React.Component {
                   </LinearGradient>
                 </TouchableHighlight>
                 <Button
-                  onPress={()=>getResponsesInCsv('test1')}
+                  onPress={() => getResponsesInCsv('test1')}
                   rounded
                   style={{
                     marginTop: 10,
@@ -227,7 +236,9 @@ export default class Home extends React.Component {
                 <TouchableHighlight
                   onPress={() => {
                     console.log('Blast Press');
-                    this.setState({adminDataView: this.state.surveyCounts.blastResponses})
+                    this.setState({
+                      adminDataView: this.state.surveyCounts.blastResponses
+                    });
                   }}
                 >
                   <LinearGradient
@@ -255,7 +266,7 @@ export default class Home extends React.Component {
                   </LinearGradient>
                 </TouchableHighlight>
                 <Button
-                  onPress={()=>getResponsesInCsv('test1')}
+                  onPress={() => getResponsesInCsv('test1')}
                   rounded
                   style={{
                     marginTop: 10,
@@ -270,14 +281,22 @@ export default class Home extends React.Component {
                 </Button>
               </View>
             </View>
-            <ScrollView style={{backgroundColor: '#eee'}}>
+
+            <ScrollView style={{ backgroundColor: '#eee' }}>
               <FlatList
                 style={{ top: '5%' }}
                 data={this.state.adminDataView}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => (
-                  <TouchableHighlight style={{backgroundColor: '#2E96C7', margin: 5, borderRadius: 5}}>
-                    <Text>Response {index + 1}: {item.user}</Text>
+                  <TouchableHighlight
+                    style={{
+                      margin: 5,
+                      borderRadius: 5
+                    }}
+                  >
+                    <Text style={{ fontSize: 16, marginBottom: 15 }}>
+                      Response {index + 1}: {item.user}
+                    </Text>
                   </TouchableHighlight>
                 )}
               />
