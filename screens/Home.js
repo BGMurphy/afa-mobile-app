@@ -32,9 +32,8 @@ let ScreenHeight = Dimensions.get('window').height;
 let ScreenWidth = Dimensions.get('window').width;
 
 const iconPaths = {
-  "Aqua Blast": require('../assets/programs-aquablast.jpg'),
-  "Aqua Vision": require('../assets/programs-aquavision.jpg')
-
+  'Aqua Blast': require('../assets/programs-aquablast.jpg'),
+  'Aqua Vision': require('../assets/programs-aquavision.jpg')
 };
 
 // look up
@@ -64,7 +63,6 @@ export default class Home extends React.Component {
     const { currentUser } = firebase.auth();
     console.log('currentUser', currentUser);
     this.setState({ currentUser });
-
   }
 
   makeSelectProgram(index) {
@@ -75,8 +73,6 @@ export default class Home extends React.Component {
       });
     };
   }
-
-
 
   render() {
     const { currentUser } = this.state;
