@@ -20,6 +20,7 @@ import styled from 'styled-components';
 import Dimensions from 'Dimensions';
 
 let width = Dimensions.get('window').width;
+let height = Dimensions.get('window').height;
 
 const Color = ['#0818A8', '#024FA8', '#2E96C7'];
 
@@ -128,10 +129,10 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: 20, marginBottom: 15 }}
+            style={{ marginRight: width*0.565, marginBottom: 15, backgroundColor: 'blue' }}
           >
+            <Icon name="arrow-back" style={{paddingLeft: 10}} />
             <Text>Previous</Text>
-            <Icon name="arrow-forward" />
           </Button>
         </ButtonWrapper>
         <ButtonWrapper>
@@ -140,7 +141,7 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: 20, marginBottom: 15 }}
+            style={{ marginRight: 20, marginBottom: 15, backgroundColor: 'blue' }}
           >
             <Text>{isLastPage ? 'Finish' : 'Next'}</Text>
             <Icon name="arrow-forward" />

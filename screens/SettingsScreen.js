@@ -92,6 +92,7 @@ export default class SettingsScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
+<<<<<<< HEAD
           <TouchableOpacity
             style={styles.links}
             onPress={() => {
@@ -113,6 +114,41 @@ export default class SettingsScreen extends React.Component {
             onPress={() => {
               Linking.openURL('https://aquafitforall.org/#/programs');
             }}
+=======
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/aboutus')}}>
+              <Text style={styles.linkText}>About Us</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/research')}}>
+              <Text style={styles.linkText}>Research</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/programs')}}>
+              <Text style={styles.linkText}>Programs</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/contactus')}}>
+              <Text style={styles.linkText}>Contact Us</Text>
+            </TouchableOpacity>
+          </View>
+        <ImageBackground
+                      source={require('../assets/bg.jpg')}
+                      imageStyle={{ opacity: 0.8 }}
+                      style={styles.img}
+                    >
+         
+          <Text style={styles.title}>
+            Making aquatic therapy accessible for everyone
+          </Text>
+  
+          <Text style={styles.text}>
+            Our mission is to work with existing community groups/organizations to design and provide accessible aquatic exercise opportunities for people with disabilities/injuries who may not be able to access regular aquatic programs. We believe that physical fitness and social participation through aquatic exercises are things that should be enjoyed by everyone.
+          </Text>
+  
+          <Button
+            style={styles.signOut}
+            full
+            rounded
+            color="#e93766"
+            onPress={this.handleSignOut}
+>>>>>>> 80459583606cc35ec0ff20cda6810ce90c44b2b9
           >
             <Text style={styles.linkText}>Programs</Text>
           </TouchableOpacity>
