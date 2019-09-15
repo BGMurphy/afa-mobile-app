@@ -59,7 +59,14 @@ export default class Home extends React.Component {
           img: '...'
         }
       ],
+      surveyCounts: {
+        aquaVison: 0,
+        aquaBlast: 0
+      }
     };
+    this.fetchResponseData = this.fetchResponseData.bind(this);
+    this.handleResponseData = this.handleResponseData.bind(this);
+    this.getResponseCounts = this.getResponseCounts.bind(this);
   }
 
   componentDidMount() {
@@ -68,7 +75,8 @@ export default class Home extends React.Component {
     // getResponsesInCsv('test1');
     this.setState({ currentUser });
     if (currentUser.email == 'admin@test.com') {
-      this.setState({userIsAdmin: true} )
+      this.setState({ userIsAdmin: true });
+      this.fetchResponseData();
     }
   }
 
@@ -89,176 +97,246 @@ export default class Home extends React.Component {
     }
   }
 
+  fetchResponseData() {
+    firebase
+      .database()
+      .ref('/responses/')
+      .once('value', snapshot => {
+        this.getResponseCounts(snapshot.val());
+        //this.handleResponseData(snapshot.val());
+      });
+  }
+
+  getResponseCounts(responses) {
+    let visionCount = 0;
+    let blastCount = 0;
+    for (let responseKey in responses) {
+      if (responses[responseKey].programId == 'program1') {
+        visionCount += 1;
+      }
+      if (responses[responseKey].programId == 'program2') {
+        blastCount += 1;
+      }
+    }
+    this.setState({
+      surveyCounts: {
+        visionCount: visionCount,
+        blastCount: blastCount
+      }
+    });
+    console.log(visionCount, blastCount);
+  }
+
+  handleResponseData(survey) {
+    const pages = survey;
+    //console.log(pages);
+    let resultResponses = [];
+    for (let pageKey in pages) {
+      const questions = pages[pageKey];
+      for (let key in questions) {
+        resultResponses.push(questions[key]);
+      }
+    }
+    //resultResponses.push('test');
+    console.log(resultResponses);
+  }
+
   render() {
     const { currentUser } = this.state;
     return (
       <View style={{ flex: 1 }}>
-        { this.state.userIsAdmin ? (
+        {this.state.userIsAdmin ? (
           <View>
-            <Text style={{ color: '#000', fontSize: 20 }}>Welcome, Admin</Text>
-            <View style={{ flexDirection: 'row'}}>
-              <View style={styles.adminSurveySelector, { backgroundColor: 'purple'}}>
-                <TouchableHighlight>
-                  <View>
-                    <Text>Aqua Vision</Text>
+            <LinearGradient colors={HeaderColor} style={styles.gradient}>
+              <Text style={{ color: '#fff', fontSize: 20 }}>
+                Data Management
+              </Text>
+            </LinearGradient>
+            <Text style={{ color: '#000', fontSize: 18, marginLeft: 10 }}>
+              Welcome,{' '}
+              <Text style={{ color: '#0818A8', fontSize: 24 }}>admin</Text>!
+              {'\n'}You can view the responses from following surveys.
+            </Text>
 
-                  </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                marginTop: 10
+              }}
+            >
+              <View style={styles.adminSurveySelector}>
+                <TouchableHighlight>
+                  <LinearGradient
+                    colors={['#531CBA', '#0818A8', '#024FA8']}
+                    style={styles.box}
+                  >
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 24,
+                          color: '#fff'
+                        }}
+                      >
+                        Aqua Vision
+                      </Text>
+                    </View>
+                  </LinearGradient>
                 </TouchableHighlight>
+                <Button
+                  rounded
+                  style={{
+                    marginTop: 10,
+                    width: 125,
+                    color: 'green',
+                    alignItems: 'center',
+                    backgroundColor: 'green',
+                    textAlign: 'center'
+                  }}
+                >
+                  <Text>Export to csv</Text>
+                </Button>
               </View>
-              <View style={styles.adminSurveySelector, { backgroundColor: 'blue'}}>
-                <TouchableHighlight >
-                  <View>
-                    <Text>Aqua BLAST</Text>
-                  </View>
+              <View style={styles.adminSurveySelector}>
+                <TouchableHighlight>
+                  <LinearGradient
+                    colors={['#0818A8', '#024FA8', '#2E96C7']}
+                    style={styles.box}
+                  >
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: '#fff'
+                        }}
+                      >
+                        Aqua BLAST
+                      </Text>
+                    </View>
+                  </LinearGradient>
                 </TouchableHighlight>
-            </View>
+                <Button
+                  rounded
+                  style={{
+                    marginTop: 10,
+                    width: 125,
+                    color: 'green',
+                    alignItems: 'center',
+                    backgroundColor: 'green',
+                    textAlign: 'center'
+                  }}
+                >
+                  <Text>Export to csv</Text>
+                </Button>
+              </View>
             </View>
           </View>
         ) : (
-        <View style={{ flex: 1 }}>
-          <LinearGradient colors={HeaderColor} style={styles.gradient}>
-            <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-          </LinearGradient>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <Text
+          <View style={{ flex: 1 }}>
+            <LinearGradient colors={HeaderColor} style={styles.gradient}>
+              <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
+            </LinearGradient>
+            <View
               style={{
-                alignSelf: 'center',
-                fontSize: 20,
+                flex: 1,
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
             >
-              Hi,{' '}
-              <Text style={{ fontSize: 20, color: '#0818A8' }}>
-                {currentUser && currentUser.email}!
-              </Text>
-            </Text>
-
-            <FlatList
-              style={{ top: '5%' }}
-              data={this.state.programs}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
-                <TouchableOpacity
-                  onPress={this.makeSelectProgram(index)}
-                  activeOpacity={0.8}
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Text
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
                 >
-                  <ImageBackground
-                    source={iconPaths[item.name]}
-                    imageStyle={{ borderRadius: 20, opacity: 0.5 }}
-                    style={styles.img}
-                  >
-                    <LinearGradient
-                      colors={this.selectColor(item.name)}
-                      style={styles.gradientCard}
+                  Hi,{' '}
+                  <Text style={{ fontSize: 20, color: '#0818A8' }}>
+                    {currentUser && currentUser.email}!
+                  </Text>
+                </Text>
+
+                <FlatList
+                  style={{ top: '5%' }}
+                  data={this.state.programs}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      onPress={this.makeSelectProgram(index)}
+                      activeOpacity={0.8}
                     >
-                      <View
-                        style={{
-                          width: ScreenWidth - 20,
-                          height: ScreenHeight - 470,
-                          marginBottom: 20,
-                          borderRadius: 20
-                        }}
+                      <ImageBackground
+                        source={iconPaths[item.name]}
+                        imageStyle={{ borderRadius: 20, opacity: 0.5 }}
+                        style={styles.img}
                       >
-                        <Text
-                          style={{
-                            color: '#fff',
-                            fontSize: 25,
-                            paddingLeft: 15,
-                            paddingTop: 15,
-                            fontWeight: 'bold'
-                          }}
+                        <LinearGradient
+                          colors={this.selectColor(item.name)}
+                          style={styles.gradientCard}
                         >
-                          {item.name}
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            fontSize: 18,
-                            paddingLeft: 15,
-                            paddingTop: 15
-                          }}
-                        >
-                          Aqua BLAST project aims to improve physical activity
-                          and social connections for stroke survivors in the
-                          Lower Mainland.
-                        </Text>
-                        <Button
-                          rounded
-                          style={{
-                            backgroundColor: '#EFB215',
-                            width: '65%',
-                            zIndex: 200,
-                            marginLeft: '30%',
-                            opacity: 1
-                          }}
-                          onPress={this.makeSelectProgram(index)}
-                        >
-                          <Text>Click here to start survey!!</Text>
-                        </Button>
-                      </View>
-                    </LinearGradient>
-                  </ImageBackground>
-                </TouchableOpacity>
-              )}
-            />
+                          <View
+                            style={{
+                              width: ScreenWidth - 20,
+                              height: ScreenHeight - 470,
+                              marginBottom: 20,
+                              borderRadius: 20
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: '#fff',
+                                fontSize: 25,
+                                paddingLeft: 15,
+                                paddingTop: 15,
+                                fontWeight: 'bold'
+                              }}
+                            >
+                              {item.name}
+                            </Text>
+                            <Text
+                              style={{
+                                color: '#fff',
+                                fontSize: 18,
+                                paddingLeft: 15,
+                                paddingTop: 15
+                              }}
+                            >
+                              Aqua BLAST project aims to improve physical
+                              activity and social connections for stroke
+                              survivors in the Lower Mainland.
+                            </Text>
+                            <Button
+                              rounded
+                              style={{
+                                backgroundColor: '#EFB215',
+                                width: '65%',
+                                zIndex: 200,
+                                marginLeft: '30%',
+                                opacity: 1
+                              }}
+                              onPress={this.makeSelectProgram(index)}
+                            >
+                              <Text>Click here to start survey!!</Text>
+                            </Button>
+                          </View>
+                        </LinearGradient>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-
-
-      // <View style={{ flex: 1 }}>
-      //   <Container style={styles.container}>
-      //     <LinearGradient colors={Color} style={styles.gradient}>
-      //       <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-      //     </LinearGradient>
-      //     <View
-      //       style={{
-      //         flex: 1,
-      //         flexDirection: 'column',
-      //         justifyContent: 'center',
-      //         alignItems: 'center'
-      //       }}
-      //     >
-      //       <Text style={{ textAlign: 'center' }}>
-      //         Hi{' '}
-      //         <Text style={{ fontSize: 20, color: '#0818A8' }}>
-      //           {currentUser && currentUser.email}!
-      //         </Text>
-      //       </Text>
-
-      //       <FlatList
-      //         data={this.state.programs}
-      //         keyExtractor={(item, index) => index.toString()}
-      //         renderItem={({ item, index }) => (
-      //           <Card>
-      //             <CardItem>
-      //               <Body>
-      //                 <Text onPress={this.makeSelectProgram(index)}>
-      //                   {item.name}
-      //                 </Text>
-      //               </Body>
-      //             </CardItem>
-      //           </Card>
-      //         )}
-      //       />
-      //     </View>
-      //   </Container>
-      // </View>
-      )}
+        )}
       </View>
     );
   }
@@ -272,6 +350,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     width: '90%'
+  },
+
+  box: {
+    width: 150,
+    opacity: 0.8,
+    height: 100,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10,
+    borderRadius: 20
   },
 
   gradient: {
