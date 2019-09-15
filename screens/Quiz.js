@@ -62,7 +62,14 @@ const ButtonWrapper = styled.View`
 
 export default class Quiz extends React.Component {
   render() {
-    const {isLastPage, children, progress, questionText,onNext,questionNumber,onPrevious, onSubmit} = this.props;
+    const {
+      children,
+      progress,
+      questionText,
+      onNext,
+      questionNumber,
+      onPrevious
+    } = this.props;
 
     return (
       <React.Fragment>
@@ -112,22 +119,6 @@ export default class Quiz extends React.Component {
           }}
         >
           {children}
-          {/* <Calendar
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            markedDates={{
-              '2019-09-15': {
-                selected: true,
-                selectedColor: '#2E96C7'
-              }
-            }}
-            style={{
-              borderWidth: 0.5,
-              borderColor: '#d6d7da',
-              borderRadius: 10
-            }}
-          /> */}
         </ContentWrapper>
         <ButtonWrapper>
           <Button
