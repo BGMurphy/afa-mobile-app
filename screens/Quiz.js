@@ -128,10 +128,10 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: 20, marginBottom: 15 }}
+            style={{ marginRight: width*0.565, marginBottom: 15 }}
           >
+            <Icon name="arrow-back" style={{paddingLeft: 10}} />
             <Text>Previous</Text>
-            <Icon name="arrow-forward" />
           </Button>
         </ButtonWrapper>
         <ButtonWrapper>
