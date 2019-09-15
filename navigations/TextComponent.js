@@ -41,11 +41,11 @@ export default class TextComponent extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'lavender',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+  // container: {
+  //   flex: 1,
+  //   flexDirection: 'column',
+  //   backgroundColor: 'lavender',
+  //   justifyContent: 'center',
+  //   alignItems: 'center'
+  // },
 });

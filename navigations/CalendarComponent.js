@@ -46,11 +46,11 @@ export default class CalendarComponent extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'lavender',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+  // container: {
+  //   flex: 1,
+  //   flexDirection: 'column',
+  //   backgroundColor: 'lavender',
+  //   justifyContent: 'center',
+  //   alignItems: 'center'
+  // },
 });
