@@ -11,6 +11,7 @@ import CalendarScreen from '../screens/CalendarScreen';
 import SignUpScreen from '../screens/SignUp';
 import TabBarIcon from '../components/TabBarIcon';
 import QuizScreen from '../screens/Quiz';
+import IntroScreen from '../screens/Intro';
 
 // look up
 // https://reactnavigation.org/docs/en/stack-navigator.html#routeconfigs
@@ -39,6 +40,17 @@ HomeStack.navigationOptions = {
     />
   )
 };
+
+const IntroStack = createStackNavigator(
+  {
+    Intro: IntroScreen
+  },
+  {
+    defaultNavigationOptions: {
+      header: null
+    }
+  }
+);
 
 const SettingsStack = createStackNavigator(
   {
@@ -119,7 +131,8 @@ const MainNavigator = createAppContainer(
     {
       Loading: { screen: LoadingScreen },
       Auth: AuthStack,
-      App: AppStack
+      App: AppStack,
+      Intro: IntroStack
     },
     {
       initialRouteName: 'Loading'
