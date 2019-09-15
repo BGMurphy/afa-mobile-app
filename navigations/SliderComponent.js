@@ -33,7 +33,8 @@ export default class SliderComponent extends React.Component {
       <View>
 
         <StarRating
-          style={{width:'80%'}}
+          starSize={20}
+          containerStyle={{margin:15}}
           disabled={false}
           emptyStar={'circle-thin'}
           fullStar={'circle'}
