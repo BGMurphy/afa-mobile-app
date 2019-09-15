@@ -79,6 +79,7 @@ export default class Home extends React.Component {
     };
 
     this.next = this.next.bind(this);
+    this.previous = this.previous.bind(this);
     this.responseType = this.responseType.bind(this);
     // this.handleSignOut = this.handleSignOut.bind(this);
     // this.saveMobile = this.saveMobile.bind(this);
@@ -92,23 +93,6 @@ export default class Home extends React.Component {
     if (this.state.uid !== null) {
       this.fetchSurveyData(this.state.uid);
     }
-  }
-
-  handleSurveyData(survey) {
-    const pages = survey.surveyData;
-    const questions = [];
-    pages.map(page => {
-      const questions = page.questions;
-      for (let key in questions) {
-        questions.push(questions[key])
-      }
-    })
-    this.setState({
-      loading: false,
-      questions,
-      numQuestions: questions.length,
-      progressBar: 1 / questions.length
-    })
   }
 
   fetchSurveyData(surveyId) {
@@ -193,6 +177,19 @@ export default class Home extends React.Component {
     // console.log(this.state.questionNumber)
   }
 
+  previous() {
+    // console.log('this.state.answers',this.state.answers)
+    if (this.state.questionNumber > 0) {
+      this.setState({
+        questionNumber: this.state.questionNumber - 1,
+        progressBar: (this.state.questionNumber) / this.state.numQuestions
+      });
+    }
+
+    console.log(this.state.questionNumber)
+    console.log(this.state.progressBar)
+  }
+
   responseType(questionIndex) {
 
     if (this.state.questions[questionIndex].type == "text") {
@@ -211,7 +208,7 @@ export default class Home extends React.Component {
       return <ActivityIndicator />
     } else {
       return (
-          <Quiz progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next}>
+          <Quiz progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next} onPrevious={this.previous}>
 
             {this.responseType(questionNumber)}
 
