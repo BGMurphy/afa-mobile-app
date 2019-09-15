@@ -67,7 +67,8 @@ export default class Quiz extends React.Component {
       progress,
       questionText,
       onNext,
-      questionNumber
+      questionNumber,
+      onPrevious
     } = this.props;
 
     return (
@@ -118,22 +119,6 @@ export default class Quiz extends React.Component {
           }}
         >
           {children}
-          {/* <Calendar
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            markedDates={{
-              '2019-09-15': {
-                selected: true,
-                selectedColor: '#2E96C7'
-              }
-            }}
-            style={{
-              borderWidth: 0.5,
-              borderColor: '#d6d7da',
-              borderRadius: 10
-            }}
-          /> */}
         </ContentWrapper>
         <ButtonWrapper>
           <Button
@@ -149,13 +134,13 @@ export default class Quiz extends React.Component {
         </ButtonWrapper>
         <ButtonWrapper>
           <Button
-            onPress={onNext}
+            onPress={isLastPage? onSubmit: onNext}
             rounded
             iconRight
             light
             style={{ marginRight: 20, marginBottom: 15 }}
           >
-            <Text>Next</Text>
+            <Text>{isLastPage? 'Finish':'Next'}</Text>
             <Icon name="arrow-forward" />
           </Button>
         </ButtonWrapper>
