@@ -6,7 +6,8 @@ import {
   TextInput,
   FlatList,
   ImageBackground,
-  TouchableHighlight
+  TouchableHighlight,
+  StatusBar
 } from 'react-native';
 import {
   Container,
@@ -234,9 +235,12 @@ export default class Home extends React.Component {
           </View>
         ) : (
           <View style={{ flex: 1 }}>
-            <LinearGradient colors={HeaderColor} style={styles.gradient}>
-              <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-            </LinearGradient>
+            <Header style={{ backgroundColor: '#0818A8' }}>
+              <Text style={{ color: '#fff', fontSize: 20, paddingTop: 10 }}>
+                Our Programs
+              </Text>
+            </Header>
+
             <View
               style={{
                 flex: 1,
@@ -256,7 +260,8 @@ export default class Home extends React.Component {
                     alignSelf: 'center',
                     fontSize: 20,
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    marginTop: 10
                   }}
                 >
                   Hi,{' '}
