@@ -6,7 +6,8 @@ import {
   TextInput,
   FlatList,
   ImageBackground,
-  TouchableHighlight
+  TouchableHighlight,
+  StatusBar
 } from 'react-native';
 import {
   Container,
@@ -118,13 +119,13 @@ export default class Home extends React.Component {
         blastCount += 1;
       }
     }
+    //console.log('Counts:', visionCount, blastCount);
     this.setState({
       surveyCounts: {
         visionCount: visionCount,
         blastCount: blastCount
       }
     });
-    console.log(visionCount, blastCount);
   }
 
   handleResponseData(survey) {
@@ -137,8 +138,7 @@ export default class Home extends React.Component {
         resultResponses.push(questions[key]);
       }
     }
-    //resultResponses.push('test');
-    console.log(resultResponses);
+    //console.log(resultResponses);
   }
 
   render() {
@@ -155,7 +155,7 @@ export default class Home extends React.Component {
             <Text style={{ color: '#000', fontSize: 18, marginLeft: 10 }}>
               Welcome,{' '}
               <Text style={{ color: '#0818A8', fontSize: 24 }}>admin</Text>!
-              {'\n'}You can view the responses from following surveys.
+              {'\n'}You can view responses from the following surveys:
             </Text>
 
             <View
@@ -180,6 +180,14 @@ export default class Home extends React.Component {
                         }}
                       >
                         Aqua Vision
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#fff'
+                        }}
+                      >
+                        {this.state.surveyCounts.visionCount} Responses
                       </Text>
                     </View>
                   </LinearGradient>
@@ -214,6 +222,14 @@ export default class Home extends React.Component {
                       >
                         Aqua BLAST
                       </Text>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#fff'
+                        }}
+                      >
+                        {this.state.surveyCounts.blastCount} Responses
+                      </Text>
                     </View>
                   </LinearGradient>
                 </TouchableHighlight>
@@ -236,9 +252,12 @@ export default class Home extends React.Component {
           </View>
         ) : (
           <View style={{ flex: 1 }}>
-            <LinearGradient colors={HeaderColor} style={styles.gradient}>
-              <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-            </LinearGradient>
+            <Header style={{ backgroundColor: '#0818A8' }}>
+              <Text style={{ color: '#fff', fontSize: 20, paddingTop: 10 }}>
+                Our Programs
+              </Text>
+            </Header>
+
             <View
               style={{
                 flex: 1,
@@ -258,7 +277,8 @@ export default class Home extends React.Component {
                     alignSelf: 'center',
                     fontSize: 20,
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    marginTop: 10
                   }}
                 >
                   Hi,{' '}
