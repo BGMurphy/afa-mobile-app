@@ -34,10 +34,6 @@ export default class TextComponent extends React.Component {
     });
     return (
       <View>
-        
-        <Text>
-          DROPDOWN GOES HERE
-        </Text>
 
         <Picker
           selectedValue={this.props.value}

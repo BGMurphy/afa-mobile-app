@@ -73,6 +73,7 @@ export default class Home extends React.Component {
   makeOnSetValue(index) {
     const fieldName = 'field' + index;
     return (value) => {
+      console.log('value', value)
       this.setState(prevState => ({
         answers: {...prevState.answers, [fieldName]: value}
       }))
@@ -110,14 +111,23 @@ export default class Home extends React.Component {
     console.log(this.state.progressBar)
   }
 
+  insert(arr, index, newItem) {return [
+    // part of the array before the specified index
+    ...arr.slice(0, index),
+    // inserted item
+    newItem,
+    // part of the array after the specified index
+    ...arr.slice(index)
+  ]}
+
   responseType(questionIndex) {
 
     if (this.state.questions[questionIndex].type == "text") {
       return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else if (this.state.questions[questionIndex].type == "radio") {
-      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} validity={this.state.fieldValidity['field'+questionIndex]||true} />
+      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.insert(this.state.questions[questionIndex].options,0,'')} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else if (this.state.questions[questionIndex].type == "date") {
-      return <CalendarComponent />
+      return <CalendarComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else {
       // change this
       return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
