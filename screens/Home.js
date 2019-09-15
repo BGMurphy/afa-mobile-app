@@ -74,18 +74,14 @@ export default class Home extends React.Component {
     };
   }
 
-<<<<<<< HEAD
-=======
   selectColor(name) {
-    if(name == "Aqua Blast") {
+    if (name == 'Aqua Blast') {
       return ['#0818A8', '#024FA8', '#2E96C7'];
     } else {
       return ['#531CBA', '#0818A8', '#024FA8'];
     }
   }
 
-
->>>>>>> 839f183136035bb5e28b019784ca0b4a8f22246d
   render() {
     const { currentUser } = this.state;
     return (
@@ -129,7 +125,10 @@ export default class Home extends React.Component {
                   source={iconPaths[item.name]}
                   style={styles.img}
                 >
-                  <LinearGradient colors={this.selectColor(item.name)} style={styles.gradientCard}>
+                  <LinearGradient
+                    colors={this.selectColor(item.name)}
+                    style={styles.gradientCard}
+                  >
                     <View
                       style={{
                         width: ScreenWidth - 20,
@@ -150,45 +149,6 @@ export default class Home extends React.Component {
           </View>
         </View>
       </View>
-
-      // <View style={{ flex: 1 }}>
-      //   <Container style={styles.container}>
-      //     <LinearGradient colors={Color} style={styles.gradient}>
-      //       <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-      //     </LinearGradient>
-      //     <View
-      //       style={{
-      //         flex: 1,
-      //         flexDirection: 'column',
-      //         justifyContent: 'center',
-      //         alignItems: 'center'
-      //       }}
-      //     >
-      //       <Text style={{ textAlign: 'center' }}>
-      //         Hi{' '}
-      //         <Text style={{ fontSize: 20, color: '#0818A8' }}>
-      //           {currentUser && currentUser.email}!
-      //         </Text>
-      //       </Text>
-
-      //       <FlatList
-      //         data={this.state.programs}
-      //         keyExtractor={(item, index) => index.toString()}
-      //         renderItem={({ item, index }) => (
-      //           <Card>
-      //             <CardItem>
-      //               <Body>
-      //                 <Text onPress={this.makeSelectProgram(index)}>
-      //                   {item.name}
-      //                 </Text>
-      //               </Body>
-      //             </CardItem>
-      //           </Card>
-      //         )}
-      //       />
-      //     </View>
-      //   </Container>
-      // </View>
     );
   }
 }
