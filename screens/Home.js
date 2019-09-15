@@ -58,15 +58,23 @@ export default class Home extends React.Component {
           img: '...'
         }
       ],
+      surveyCounts: {
+        aquaVison: 0,
+        aquaBlast: 0
+      }
     };
+    this.fetchResponseData = this.fetchResponseData.bind(this);
+    this.handleResponseData = this.handleResponseData.bind(this);
+    this.getResponseCounts = this.getResponseCounts.bind(this);
   }
 
   componentDidMount() {
     const { currentUser } = firebase.auth();
-    console.log('currentUser', currentUser);
+    //console.log('currentUser', currentUser);
     this.setState({ currentUser });
     if (currentUser.email == 'admin@test.com') {
       this.setState({userIsAdmin: true} )
+      this.fetchResponseData();
     }
   }
 
@@ -85,6 +93,47 @@ export default class Home extends React.Component {
     } else {
       return ['#531CBA', '#0818A8', '#024FA8'];
     }
+  }
+
+  fetchResponseData() {
+    firebase.database().ref('/responses/').once('value', (snapshot) => {
+      this.getResponseCounts(snapshot.val());
+      //this.handleResponseData(snapshot.val());
+    });
+  }
+
+  getResponseCounts(responses) {
+    let visionCount = 0;
+    let blastCount = 0;
+    for (let responseKey in responses) {
+      if (responses[responseKey].programId == 'program1') {
+        visionCount += 1;
+      }
+      if (responses[responseKey].programId == 'program2') {
+        blastCount += 1;
+      }
+    }
+    this.setState({
+      surveyCounts: {
+        visionCount: visionCount,
+        blastCount: blastCount
+      }
+    })
+    console.log(visionCount, blastCount);
+  }
+
+  handleResponseData(survey) {
+    const pages = survey;
+    //console.log(pages);
+    let resultResponses = [];
+    for (let pageKey in pages) {
+      const questions = pages[pageKey];
+      for (let key in questions) {
+        resultResponses.push(questions[key])
+      }
+    }
+    //resultResponses.push('test');
+    console.log(resultResponses);
   }
 
   render() {
