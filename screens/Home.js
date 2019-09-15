@@ -45,7 +45,7 @@ export default class Home extends React.Component {
 
     this.state = {
       currentUser: {},
-      userIsAdmin: true,
+      userIsAdmin: false,
       programs: [
         {
           id: 0,
@@ -57,7 +57,7 @@ export default class Home extends React.Component {
           name: 'Aqua Vision',
           img: '...'
         }
-      ]
+      ],
     };
   }
 
@@ -65,6 +65,9 @@ export default class Home extends React.Component {
     const { currentUser } = firebase.auth();
     console.log('currentUser', currentUser);
     this.setState({ currentUser });
+    if (currentUser.email == 'admin@test.com') {
+      this.setState({userIsAdmin: true} )
+    }
   }
 
   makeSelectProgram(index) {
@@ -93,9 +96,10 @@ export default class Home extends React.Component {
             <Text style={{ color: '#000', fontSize: 20 }}>Welcome, Admin</Text>
             <View style={{ flexDirection: 'row'}}>
               <View style={styles.adminSurveySelector, { backgroundColor: 'purple'}}>
-                <TouchableHighlight >
+                <TouchableHighlight>
                   <View>
                     <Text>Aqua Vision</Text>
+
                   </View>
                 </TouchableHighlight>
               </View>
@@ -212,7 +216,6 @@ export default class Home extends React.Component {
           </View>
         </View>
       </View>
-<<<<<<< HEAD
 
 
       // <View style={{ flex: 1 }}>
@@ -255,8 +258,6 @@ export default class Home extends React.Component {
       // </View>
       )}
       </View>
-=======
->>>>>>> f22545819da78ad2ac86f6d2c79a239fb86c0977
     );
   }
 }
@@ -290,15 +291,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: ScreenWidth - 20,
     height: ScreenHeight - 450,
-<<<<<<< HEAD
     marginBottom: 20,
     borderRadius: 20
   },
   adminSurveySelector: {
     height: ScreenHeight * 0.4,
     width: ScreenWidth * 0.4
-=======
-    marginBottom: 20
->>>>>>> f22545819da78ad2ac86f6d2c79a239fb86c0977
   }
 });
