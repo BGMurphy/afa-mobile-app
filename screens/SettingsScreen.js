@@ -86,7 +86,7 @@ export default class SettingsScreen extends React.Component {
           </View>
         <ImageBackground
                       source={require('../assets/bg.jpg')}
-                      imageStyle={{ opacity: 0.6 }}
+                      imageStyle={{ opacity: 0.8 }}
                       style={styles.img}
                     >
          
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textShadowColor:'black',
-    textShadowRadius:10,
+    textShadowRadius:20,
   },
   title: {
     fontSize: 28,
