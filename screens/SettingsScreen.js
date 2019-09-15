@@ -11,7 +11,7 @@ import {
   Input,
   Text
 } from 'native-base';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Linking, ImageBackground } from 'react-native';
 import * as Progress from 'react-native-progress';
 import Database from '../config/database';
 import firebase from 'firebase';
@@ -71,49 +71,43 @@ export default class SettingsScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.links}>
-            Test
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/aboutus')}}>
+              <Text style={styles.linkText}>About Us</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/research')}}>
+              <Text style={styles.linkText}>Research</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/programs')}}>
+              <Text style={styles.linkText}>Programs</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.links} onPress={ ()=>{ Linking.openURL('https://aquafitforall.org/#/contactus')}}>
+              <Text style={styles.linkText}>Contact Us</Text>
+            </TouchableOpacity>
+          </View>
+        <ImageBackground
+                      source={require('../assets/bg.jpg')}
+                      imageStyle={{ opacity: 0.6 }}
+                      style={styles.img}
+                    >
+         
+          <Text style={styles.title}>
+            Making aquatic therapy accessible for everyone
           </Text>
-          <Text style={styles.links}>
-            Test
+  
+          <Text style={styles.text}>
+            Our mission is to work with existing community groups/organizations to design and provide accessible aquatic exercise opportunities for people with disabilities/injuries who may not be able to access regular aquatic programs. We believe that physical fitness and social participation through aquatic exercises are things that should be enjoyed by everyone.
           </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-        </View>
-       
-        <Text style={styles.title}>
-          Making aquatic therapy accessible for everyone
-        </Text>
-
-        <Text style={styles.text}>
-          Our mission is to work with existing community groups/organizations to design and provide accessible aquatic exercise opportunities for people with disabilities/injuries who may not be able to access regular aquatic programs. We believe that physical fitness and social participation through aquatic exercises are things that should be enjoyed by everyone.
-        </Text>
-
-        <Button
-          style={styles.signOut}
-          full
-          rounded
-          color="#e93766"
-          onPress={this.handleSignOut}
-        >
-          <Text style={{ color: 'white', textAlign: 'center' }}>Sign Out</Text>
-        </Button>
+  
+          <Button
+            style={styles.signOut}
+            full
+            rounded
+            color="#e93766"
+            onPress={this.handleSignOut}
+          >
+            <Text style={{ color: 'white', textAlign: 'center' }}>Sign Out</Text>
+          </Button>
+        </ImageBackground>
       </View>
     );
   }
@@ -128,36 +122,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     paddingLeft: width*0.1,
     paddingRight: width*0.1,
-    paddingBottom: height*0.02
+    paddingBottom: height*0.02,
+    paddingTop: height*0.02,
+    fontWeight: 'bold',
+    color: 'white',
+    textShadowColor:'black',
+    textShadowRadius:10,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
     paddingLeft: width*0.04,
     paddingRight: width*0.04,
-    paddingBottom: height*0.02
+    paddingBottom: height*0.02,
+    color: 'white',
+    textShadowColor:'black',
+    textShadowRadius:20,
+    left: width*0.03
   },
   signOut: {
     marginLeft: width*0.1,
     marginRight: width*0.1,
-    top: height*0.1,
+    top: height*0.2,
   },
   header: {
     alignItems: 'center',
-    backgroundColor: 'blue',
+    justifyContent: 'center',
+    backgroundColor: '#007bff',
     height: 70,
     width: width * 1,
     flex: 0.1,
     flexDirection: 'row',
     position: 'absolute',
-    top: height*0.04
+    top: height*0.04,
   },
   links: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
+  linkText: {
+    color: 'white',
+  },
+  img: {
+    resizeMode: 'contain',
+    width: width,
+    height: height*0.79,
+    marginBottom: 20,
+    marginTop: width*0.33,
+    paddingTop: 20,
+  },
 });
