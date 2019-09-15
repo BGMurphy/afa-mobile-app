@@ -23,25 +23,17 @@ let width = Dimensions.get('window').width;
 // look up
 // https://github.com/oblador/react-native-progress
 export default class TextComponent extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      uid: '',
-      currentUser: null,
-    };
-
-  }
 
   render() {
+    const { value, onSetValue } = this.props;
     return (
       <View>
         
         <TextInput
           style={{height: 40}}
-          placeholder="Type here to translate!"
-          onChangeText={(text) => this.setState({text})}
-          value={this.state.text}
+          placeholder="Please enter your answer"
+          onChangeText={text => onSetValue(text)}
+          value={value}
         />
 
       </View>

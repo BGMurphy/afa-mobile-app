@@ -62,17 +62,7 @@ const ButtonWrapper = styled.View`
 
 export default class Quiz extends React.Component {
   render() {
-<<<<<<< HEAD
-    const {
-      children,
-      progress,
-      questionText,
-      onNext,
-      questionNumber
-    } = this.props;
-=======
-    const {children, progress, questionText,onNext,questionNumber,onPrevious} = this.props;
->>>>>>> 839f183136035bb5e28b019784ca0b4a8f22246d
+    const {isLastPage, children, progress, questionText,onNext,questionNumber,onPrevious, onSubmit} = this.props;
 
     return (
       <React.Fragment>
@@ -153,13 +143,13 @@ export default class Quiz extends React.Component {
         </ButtonWrapper>
         <ButtonWrapper>
           <Button
-            onPress={onNext}
+            onPress={isLastPage? onSubmit: onNext}
             rounded
             iconRight
             light
             style={{ marginRight: 20, marginBottom: 15 }}
           >
-            <Text>Next</Text>
+            <Text>{isLastPage? 'Finish':'Next'}</Text>
             <Icon name="arrow-forward" />
           </Button>
         </ButtonWrapper>

@@ -32,14 +32,14 @@ export default class Home extends React.Component {
 
     this.state = {
       loading: true,
-      uid: this.props.navigation.getParam('surveyId', null),
-      currentUser: null,
+      surveyId: this.props.navigation.getParam('surveyId', null),
+      currentUser: firebase.auth().currentUser,
       questionNumber: 0,
       numQuestions: 0,
       progressBar: 0,
       questions: [],
-      answers: [],
-      programId: 0,
+      answers: {},
+      programId: this.props.navigation.getParam('programId', null),
       date: 0,
     };
 
@@ -49,11 +49,12 @@ export default class Home extends React.Component {
     this.makeOnSetValue = this.makeOnSetValue.bind(this);
     this.fetchSurveyData = this.fetchSurveyData.bind(this);
     this.handleSurveyData = this.handleSurveyData.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
-    if (this.state.uid !== null) {
-      this.fetchSurveyData(this.state.uid);
+    if (this.state.surveyId !== null) {
+      this.fetchSurveyData(this.state.surveyId);
     }
   }
 
@@ -76,7 +77,8 @@ export default class Home extends React.Component {
       loading: false,
       questions: resultQuestions,
       numQuestions: resultQuestions.length,
-      progressBar: 1 / resultQuestions.length
+      progressBar: 1 / resultQuestions.length,
+      answers: {},
     })
   }
 
@@ -84,18 +86,19 @@ export default class Home extends React.Component {
     const fieldName = 'field' + index;
     // const newAnswers = 
     return (value) => {
-      this.setState(state => {
-        let updatedAnswers = state.answers;
-        updatedAnswers[index] = value;
-        return { answers: updatedAnswers }
-      })
+      this.setState(prevState => ({
+        answers: {...prevState.answers, [fieldName]: value}
+        // let updatedAnswers = state.answers;
+        // updatedAnswers[index] = value;
+        // return { answers: updatedAnswers }
+      }))
     }
   }
 
   next() {
     // console.log('this.state.answers',this.state.answers)
     const { questions, questionNumber, numQuestions,answers } = this.state
-    if (answers[questionNumber] = '' && questions[questionNumber].mandatory === 'true') {
+    if (answers['field'+questionNumber] === '' && questions[questionNumber].mandatory === 'true') {
       return;
     }
     if (questionNumber + 2 <= numQuestions) {
@@ -123,22 +126,40 @@ export default class Home extends React.Component {
   responseType(questionIndex) {
 
     if (this.state.questions[questionIndex].type == "text") {
-      return <TextComponent />
+      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)}/>
     } else if (this.state.questions[questionIndex].type == "radio") {
-      return <DropdownComponent value={this.state.answers[questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
-    } else {
+      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
+    } else if (this.state.questions[questionIndex].type == "date") {
       return <CalendarComponent />
+    } else {
+      // change this
+      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)}/>
     }
 
   }
 
+  onSubmit() {
+    console.log('this.state.currentUser', this.state.currentUser);
+    const {answers,currentUser,programId, surveyId} = this.state;
+    let dataToSend = {...answers, user: currentUser.email, programId, surveyId};
+    firebase.database().ref('responses/').push(dataToSend).then((data)=>{
+        //success callback
+        console.log('data ' , data);
+        this.props.navigation.navigate('Tab', {surveyFinish: true})
+    }).catch((error)=>{
+        //error callback
+        console.log('error ' , error)
+    })
+    // console.log('dataToSend', dataToSend)
+  }
+
   render() {
-    const { currentUser, loading, progressBar, questionNumber, questions } = this.state;
+    const { currentUser, loading, progressBar, questionNumber, questions, numQuestions } = this.state;
     if (loading) {
       return <ActivityIndicator />
     } else {
       return (
-          <Quiz progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next} onPrevious={this.previous}>
+          <Quiz isLastPage={questionNumber +2 > numQuestions} progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next} onPrevious={this.previous} onSubmit={this.onSubmit}>
 
             {this.responseType(questionNumber)}
 
