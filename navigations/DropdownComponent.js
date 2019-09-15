@@ -33,16 +33,25 @@ export default class TextComponent extends React.Component {
       return <Picker.Item key={i} value={s} label={s} />
     });
     return (
-      <View style={{borderRadius: 10, borderWidth: 1, borderColor: '#bdc3c7', overflow: 'hidden', marginLeft: 10, marginRight: 10}}>
-        
-        <Picker
-          selectedValue={this.props.value}
-          onValueChange={ (service) => ( this.props.onSetValue(service) ) } >
+      <View>
+        <Text style={{
+          fontSize: 16,
+          fontWeight: 'bold',
+          bottom: height*0.02,
+          left: width*0.05,
+        }}>
+          Please Pick an Option From Below:
+        </Text>
+        <View style={{borderRadius: 10, borderWidth: 1, borderColor: '#bdc3c7', overflow: 'hidden', marginLeft: 10, marginRight: 10}}>
+          <Picker
+            selectedValue={this.props.value}
+            onValueChange={ (service) => ( this.props.onSetValue(service) ) } >
 
-          {options}
+            {options}
 
-        </Picker>
+          </Picker>
 
+        </View>
       </View>
     );
   }
