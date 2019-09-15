@@ -74,8 +74,6 @@ export default class Home extends React.Component {
     };
   }
 
-<<<<<<< HEAD
-=======
   selectColor(name) {
     if(name == "Aqua Blast") {
       return ['#0818A8', '#024FA8', '#2E96C7'];
@@ -84,8 +82,6 @@ export default class Home extends React.Component {
     }
   }
 
-
->>>>>>> 839f183136035bb5e28b019784ca0b4a8f22246d
   render() {
     const { currentUser } = this.state;
     return (
