@@ -45,7 +45,7 @@ export default class Home extends React.Component {
 
     this.state = {
       currentUser: {},
-      userIsAdmin: true,
+      userIsAdmin: false,
       programs: [
         {
           id: 0,
@@ -57,7 +57,7 @@ export default class Home extends React.Component {
           name: 'Aqua Vision',
           img: '...'
         }
-      ]
+      ],
     };
   }
 
@@ -65,6 +65,9 @@ export default class Home extends React.Component {
     const { currentUser } = firebase.auth();
     console.log('currentUser', currentUser);
     this.setState({ currentUser });
+    if (currentUser.email == 'admin@test.com') {
+      this.setState({userIsAdmin: true} )
+    }
   }
 
   makeSelectProgram(index) {
@@ -93,9 +96,10 @@ export default class Home extends React.Component {
             <Text style={{ color: '#000', fontSize: 20 }}>Welcome, Admin</Text>
             <View style={{ flexDirection: 'row'}}>
               <View style={styles.adminSurveySelector, { backgroundColor: 'purple'}}>
-                <TouchableHighlight >
+                <TouchableHighlight>
                   <View>
                     <Text>Aqua Vision</Text>
+
                   </View>
                 </TouchableHighlight>
               </View>
@@ -293,6 +297,7 @@ const styles = StyleSheet.create({
   adminSurveySelector: {
     height: ScreenHeight * 0.4,
     width: ScreenWidth * 0.4,
-    marginBottom: 20
+    marginBottom: 20,
+    width: ScreenWidth * 0.4
   }
 });
