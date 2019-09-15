@@ -65,16 +65,15 @@ export default class Home extends React.Component {
     super(props);
 
     this.state = {
-      loading: false,
+      loading: true,
       uid: this.props.navigation.getParam('surveyId', null),
       currentUser: null,
-      questionObject: questions,
+      // questionObject: questions,
       questionNumber: 0,
-      numQuestions: questions.length,
-      progressBar: 1 / questions.length,
-      questions: questions,
-      answers: {}
-
+      numQuestions: 0,
+      progressBar: 0,
+      questions: [],
+      answers: [],
     };
 
     this.next = this.next.bind(this);
@@ -83,6 +82,7 @@ export default class Home extends React.Component {
     // this.saveMobile = this.saveMobile.bind(this);
     this.makeOnSetValue = this.makeOnSetValue.bind(this);
     this.fetchSurveyData = this.fetchSurveyData.bind(this);
+    this.handleSurveyData = this.handleSurveyData.bind(this);
   }
 
   componentDidMount() {
@@ -92,16 +92,44 @@ export default class Home extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (Object.keys(this.state.answers).length != Object.keys(prevState.answers).length) {
-      console.log('this.state.answers', this.state.answers)
-    }
+  handleSurveyData(survey) {
+    const pages = survey.surveyData;
+    const questions = [];
+    pages.map(page=>{
+      const questions = page.questions;
+      for (let key in questions) {
+        questions.push(questions[key])
+      }
+    })
+    this.setState({
+      loading: false,
+      questions,
+      numQuestions: questions.length,
+      progressBar: 1 /questions.length
+    })
   }
 
   fetchSurveyData(surveyId) {
-    firebase.database().ref('/surveys/test1').once('value', function (snapshot) {
-        console.log(snapshot.val())
+    firebase.database().ref('/surveys/test1').once('value', (snapshot) => {
+      this.handleSurveyData(snapshot.val());
     });
+  }
+
+  handleSurveyData(survey) {
+    const pages = survey.surveyData;
+    let resultQuestions = [];
+    for (let pageKey in pages) {
+      const questions = pages[pageKey].questions;
+      for (let key in questions) {
+        resultQuestions.push(questions[key])
+      }
+    }
+    this.setState({
+      loading: false,
+      questions: resultQuestions,
+      numQuestions: resultQuestions.length,
+      progressBar: 1 /resultQuestions.length
+    })
   }
 
   //componentDidMount() {
@@ -142,12 +170,11 @@ export default class Home extends React.Component {
     const fieldName = 'field' + index;
     // const newAnswers = 
     return (value) => {
-      this.setState(prevState => ({
-        answers: {...prevState.answers, [fieldName]: value}
-        // let updatedAnswers = state.answers;
-        // updatedAnswers[index] = value;
-        // return { answers: updatedAnswers }
-      }))
+      this.setState(state => {
+        let updatedAnswers = state.answers;
+        updatedAnswers[index] = value;
+        return { answers: updatedAnswers }
+      })
     }
   }
 
@@ -169,7 +196,7 @@ export default class Home extends React.Component {
     if (this.state.questions[questionIndex].type == "text") {
       return <TextComponent />
     } else if (this.state.questions[questionIndex].type == "dropdown") {
-      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
+      return <DropdownComponent value={this.state.answers[questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
     } else {
       return <CalendarComponent />
     }
@@ -186,7 +213,7 @@ export default class Home extends React.Component {
           <Text>Survey Id: {this.state.uid}</Text>
           <Progress.Bar progress={this.state.progressBar} width={200} />
           <Text>
-            {this.state.questionObject[this.state.questionNumber].text}
+            {this.state.questions[this.state.questionNumber].text}
           </Text>
 
           {this.responseType(this.state.questionNumber)}
