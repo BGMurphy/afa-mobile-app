@@ -118,32 +118,71 @@ export default class Home extends React.Component {
             </Text>
 
             <FlatList
+              style={{ top: '5%' }}
               data={this.state.programs}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
-                <ImageBackground
-                  source={iconPaths[item.name]}
-                  style={styles.img}
+                <TouchableOpacity
+                  onPress={this.makeSelectProgram(index)}
+                  activeOpacity={0.8}
                 >
-                  <LinearGradient
-                    colors={this.selectColor(item.name)}
-                    style={styles.gradientCard}
+                  <ImageBackground
+                    source={iconPaths[item.name]}
+                    imageStyle={{ borderRadius: 20, opacity: 0.5 }}
+                    style={styles.img}
                   >
-                    <View
-                      style={{
-                        width: ScreenWidth - 20,
-                        height: ScreenHeight - 450,
-
-                        marginBottom: 20,
-                        borderRadius: 20
-                      }}
+                    <LinearGradient
+                      colors={this.selectColor(item.name)}
+                      style={styles.gradientCard}
                     >
-                      <Text onPress={this.makeSelectProgram(index)}>
-                        {item.name}
-                      </Text>
-                    </View>
-                  </LinearGradient>
-                </ImageBackground>
+                      <View
+                        style={{
+                          width: ScreenWidth - 20,
+                          height: ScreenHeight - 470,
+                          marginBottom: 20,
+                          borderRadius: 20
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 25,
+                            paddingLeft: 15,
+                            paddingTop: 15,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 18,
+                            paddingLeft: 15,
+                            paddingTop: 15
+                          }}
+                        >
+                          Aqua BLAST project aims to improve physical activity
+                          and social connections for stroke survivors in the
+                          Lower Mainland.
+                        </Text>
+                        <Button
+                          rounded
+                          style={{
+                            backgroundColor: '#EFB215',
+                            width: '65%',
+                            zIndex: 200,
+                            marginLeft: '30%',
+                            opacity: 1
+                          }}
+                          onPress={this.makeSelectProgram(index)}
+                        >
+                          <Text>Click here to start survey!!</Text>
+                        </Button>
+                      </View>
+                    </LinearGradient>
+                  </ImageBackground>
+                </TouchableOpacity>
               )}
             />
           </View>
@@ -178,10 +217,10 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   img: {
+    borderRadius: 20,
     resizeMode: 'contain',
     width: ScreenWidth - 20,
     height: ScreenHeight - 450,
-    marginBottom: 20,
-    borderRadius: 20
+    marginBottom: 20
   }
 });
