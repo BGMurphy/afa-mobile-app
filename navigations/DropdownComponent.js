@@ -27,12 +27,6 @@ export default class TextComponent extends React.Component {
     value:""
   }
 
-  constructor(props) {
-    super(props);
-
-
-  }
-
   render() {
     console.log(this.props.options)
     let options = this.props.options.map( (s, i) => {

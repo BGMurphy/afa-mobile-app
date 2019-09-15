@@ -15,7 +15,11 @@ import {
 import { StyleSheet, ImageBackground, View, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import * as Progress from 'react-native-progress';
 import styled from 'styled-components';
+import Dimensions from 'Dimensions';
+
+let width = Dimensions.get('window').width;
 
 const Color = ['#0818A8', '#024FA8', '#2E96C7'];
 
@@ -56,14 +60,15 @@ const ButtonWrapper = styled.View`
 
 export default class Quiz extends React.Component {
   render() {
+    const {children, progress, questionText,onNext,questionNumber} = this.props;
+
     return (
       <React.Fragment>
         <ProgressBarWrapper
           style={{ backgroundColor: '#EAA5BA', justifyContent: 'center' }}
         >
-          <Text>
-            Here is Progress Bar Wrapper, Here is Progress Bar Wrapper
-          </Text>
+          <Progress.Bar progress={progress} width={width} />
+
         </ProgressBarWrapper>
 
         <View
@@ -82,9 +87,9 @@ export default class Quiz extends React.Component {
             }}
           >
             <View style={styles.circle}>
-              <Text style={{ fontSize: 25 }}>1</Text>
+              <Text style={{ fontSize: 25 }}>{questionNumber + 1}</Text>
             </View>
-            <Question>Here is a Question</Question>
+            <Question>{questionText}</Question>
           </QuestionWrapper>
         </View>
         <ContentWrapper
@@ -95,6 +100,7 @@ export default class Quiz extends React.Component {
             borderRadius: 10
           }}
         >
+          {children}
           {/* <Calendar
             onDayPress={day => {
               console.log('selected day', day);
@@ -114,6 +120,7 @@ export default class Quiz extends React.Component {
         </ContentWrapper>
         <ButtonWrapper>
           <Button
+            onPress={onNext}
             rounded
             iconRight
             light
