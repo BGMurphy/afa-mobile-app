@@ -18,8 +18,10 @@ import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import * as Progress from 'react-native-progress';
 import styled from 'styled-components';
 import Dimensions from 'Dimensions';
+import firebase from 'firebase';
 
 let width = Dimensions.get('window').width;
+let height = Dimensions.get('window').height;
 
 const Color = ['#0818A8', '#024FA8', '#2E96C7'];
 
@@ -61,6 +63,27 @@ const ButtonWrapper = styled.View`
 `;
 
 export default class Quiz extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true
+    };
+  }
+
+  componentDidMount() {
+    const images = firebase.storage().ref();
+    const login_background = images.child('bg2.jpg');
+    let promises = [];
+    promises.push(login_background.getDownloadURL());
+    Promise.all(promises).then(images => {
+      this.setState({
+        login_background: images[0],
+        loading: false
+      });
+    });
+  }
+
   render() {
     const {
       children,
@@ -87,7 +110,8 @@ export default class Quiz extends React.Component {
           }}
         >
           <ImageBackground
-            source={require('../assets/bg2.jpg')}
+            // source={require('../assets/bg2.jpg')}
+            source={{ uri: this.state.login_background }}
             style={{ flex: 1 }}
           >
             <LinearGradient colors={Color} style={styles.gradient}>
@@ -117,7 +141,7 @@ export default class Quiz extends React.Component {
             backgroundColor: '#fff',
             borderWidth: 0.5,
             borderColor: '#d6d7da',
-            borderRadius: 10
+            borderRadius: 20
           }}
         >
           {children}
@@ -128,9 +152,16 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: width*0.565, marginBottom: 15 }}
+            style={{
+              marginRight: width * 0.565,
+              marginBottom: 15,
+              backgroundColor: '#0818A8'
+            }}
           >
-            <Icon name="arrow-back" style={{paddingLeft: 10}} />
+            <Icon
+              name="arrow-back"
+              style={{ paddingLeft: 10, color: '#fff' }}
+            />
             <Text>Previous</Text>
           </Button>
         </ButtonWrapper>
@@ -140,10 +171,14 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: 20, marginBottom: 15 }}
+            style={{
+              marginRight: 20,
+              marginBottom: 15,
+              backgroundColor: '#0818A8'
+            }}
           >
             <Text>{isLastPage ? 'Finish' : 'Next'}</Text>
-            <Icon name="arrow-forward" />
+            <Icon name="arrow-forward" style={{ color: '#fff' }} />
           </Button>
         </ButtonWrapper>
       </React.Fragment>
@@ -153,8 +188,8 @@ export default class Quiz extends React.Component {
 
 const styles = StyleSheet.create({
   circle: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 100 / 2,
     backgroundColor: '#fff',
     alignItems: 'center',

@@ -7,6 +7,7 @@ import Database from '../config/database';
 import firebase from 'firebase';
 import Dimensions from 'Dimensions';
 import Quiz from './Quiz';
+import SliderComponent from '../navigations/SliderComponent';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -83,12 +84,12 @@ export default class Home extends React.Component {
   next() {
     // console.log('this.state.answers',this.state.answers)
     const { questions, questionNumber, numQuestions,answers } = this.state
-    if (answers['field'+questionNumber] === '' && questions[questionNumber].mandatory === 'true') {
-      const fieldName = 'field' + questionNumber;
-      return this.setState(prevState => ({
-        fieldValidity: {...prevState.fieldValidity, [fieldName]: value}
-      }));
-    }
+    // if (answers['field'+questionNumber] === '' && questions[questionNumber].mandatory === 'true') {
+    //   const fieldName = 'field' + questionNumber;
+    //   return this.setState(prevState => ({
+    //     fieldValidity: {...prevState.fieldValidity, [fieldName]: value}
+    //   }));
+    // }
     if (questionNumber + 2 <= numQuestions) {
       this.setState({
         questionNumber: questionNumber + 1,
@@ -128,6 +129,8 @@ export default class Home extends React.Component {
       return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.insert(this.state.questions[questionIndex].options,0,'')} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else if (this.state.questions[questionIndex].type == "date") {
       return <CalendarComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
+    } else if (this.state.questions[questionIndex].type == "scale") {
+      return <SliderComponent value={this.state.answers['field'+questionIndex] || 0} onSetValue={this.makeOnSetValue(questionIndex)} size={this.state.questions[questionIndex].size} />
     } else {
       // change this
       return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
