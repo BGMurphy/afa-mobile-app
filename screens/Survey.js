@@ -24,42 +24,6 @@ import Quiz from './Quiz';
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
-let questions = [
-  {
-    "qid": "1",
-    "text": "QUESTION1",
-    "type": "text"
-  },
-  {
-    "qid": "2",
-    "text": "QUESTION2",
-    "type": "dropdown",
-    "options": ['yes', 'no'],
-  },
-  // {
-  //   "qid": "3",
-  //   "text": "QUESTION3",
-  //   "type": "text",
-  // },
-  {
-    "qid": "2",
-    "text": "QUESTION2",
-    "type": "dropdown",
-    "options": ['yes', 'no', 'ben'],
-  },
-  {
-    "qid": "4",
-    "text": "QUESTION4",
-    "type": "dropdown",
-    "options": ['yes', 'no', 'maybe', 'SHANYUUU'],
-  },
-  {
-    "qid": "5",
-    "text": "QUESTION5",
-    "type": "calendar"
-  },
-];
-
 // look up
 // https://github.com/oblador/react-native-progress
 export default class Home extends React.Component {
@@ -70,49 +34,30 @@ export default class Home extends React.Component {
       loading: true,
       uid: this.props.navigation.getParam('surveyId', null),
       currentUser: null,
-      // questionObject: questions,
       questionNumber: 0,
       numQuestions: 0,
       progressBar: 0,
       questions: [],
       answers: [],
+      programId: 0,
+      date: 0,
     };
 
     this.next = this.next.bind(this);
     this.responseType = this.responseType.bind(this);
-    // this.handleSignOut = this.handleSignOut.bind(this);
-    // this.saveMobile = this.saveMobile.bind(this);
     this.makeOnSetValue = this.makeOnSetValue.bind(this);
     this.fetchSurveyData = this.fetchSurveyData.bind(this);
     this.handleSurveyData = this.handleSurveyData.bind(this);
   }
 
   componentDidMount() {
-    console.log('this.state.uid', this.state.uid)
     if (this.state.uid !== null) {
       this.fetchSurveyData(this.state.uid);
     }
   }
 
-  handleSurveyData(survey) {
-    const pages = survey.surveyData;
-    const questions = [];
-    pages.map(page => {
-      const questions = page.questions;
-      for (let key in questions) {
-        questions.push(questions[key])
-      }
-    })
-    this.setState({
-      loading: false,
-      questions,
-      numQuestions: questions.length,
-      progressBar: 1 / questions.length
-    })
-  }
-
   fetchSurveyData(surveyId) {
-    firebase.database().ref('/surveys/test1').once('value', (snapshot) => {
+    firebase.database().ref('/surveys/'+surveyId).once('value', (snapshot) => {
       this.handleSurveyData(snapshot.val());
     });
   }
@@ -134,40 +79,6 @@ export default class Home extends React.Component {
     })
   }
 
-  //componentDidMount() {
-  //   const { currentUser } = firebase.auth();
-  //   this.setState({ currentUser });
-  //   // Get User Credentials
-  //   let user = firebase.auth().currentUser;
-  //   // Listen for mobile number changes
-  //   Database.listenUserMobile(user.uid, mobileNumber => {
-  //     this.setState({
-  //       mobile: mobileNumber,
-  //       mobileForm: mobileNumber
-  //     });
-  //   });
-
-  //   this.setState({
-  //     uid: user.uid
-  //   });
-
-  //}
-
-  // handleSignOut = () => {
-  //   firebase
-  //     .auth()
-  //     .signOut()
-  //     .then(result => alert('sign out success'))
-  //     .catch(error => console.error(error));
-  // };
-
-  // saveMobile() {
-  //   // Set Mobile
-  //   if (this.state.uid && this.state.mobileForm) {
-  //     Database.setUserMobile(this.state.uid, this.state.mobileForm);
-  //   }
-  // }
-
   makeOnSetValue(index) {
     const fieldName = 'field' + index;
     // const newAnswers = 
@@ -182,14 +93,16 @@ export default class Home extends React.Component {
 
   next() {
     // console.log('this.state.answers',this.state.answers)
-    if (this.state.questionNumber + 2 <= this.state.numQuestions) {
+    const { questions, questionNumber, numQuestions,answers } = this.state
+    if (answers[questionNumber] = '' && questions[questionNumber].mandatory === 'true') {
+      return;
+    }
+    if (questionNumber + 2 <= numQuestions) {
       this.setState({
-        questionNumber: this.state.questionNumber + 1,
+        questionNumber: questionNumber + 1,
+        progressBar: (questionNumber + 2) / numQuestions
       });
     }
-    this.setState({
-      progressBar: (this.state.questionNumber + 2) / this.state.numQuestions
-    });
     // console.log(this.state.questionNumber)
   }
 
@@ -239,17 +152,4 @@ export default class Home extends React.Component {
     }
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'lavender',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  signOutButton: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    width: '90%'
-  }
-});
+
