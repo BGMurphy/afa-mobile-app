@@ -1,17 +1,15 @@
 {
   "expo": {
-    "name": "HomeScreen",
+    "name": "Aquafit for All Association Survey App",
     "slug": "afa",
     "privacy": "public",
     "sdkVersion": "34.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "description": "The Aquafit for All (AFA) Survey App gathers survey data from participants in AFA's Aquafit programs, in order to better understand the needs of the people they serve. It is built with a React Native frontend and Firebase backend, and is currently optimized for Android devices.",
+    "githubUrl": "https://github.com/naohashizume/afa-mobile-app",
+    "icon": "./assets/AFA_Logo_Blue.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -20,9 +18,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     }
