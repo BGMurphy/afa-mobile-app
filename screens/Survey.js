@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight, ActivityIndicator } from 'react-native';
 import TextComponent from '../navigations/TextComponent';
 import DropdownComponent from '../navigations/DropdownComponent';
 import CalendarComponent from '../navigations/CalendarComponent';
@@ -24,26 +24,37 @@ let width = Dimensions.get('window').width;
 
 let questions = [
   {
-    "qid" : "1",
-    "text" : "QUESTION1",
-    "type" : "text"
+    "qid": "1",
+    "text": "QUESTION1",
+    "type": "text"
   },
   {
-    "qid" : "2",
-    "text" : "QUESTION2",
-    "type" : "dropdown",
-    "options" : ['yes', 'no'],
+    "qid": "2",
+    "text": "QUESTION2",
+    "type": "dropdown",
+    "options": ['yes', 'no'],
+  },
+  // {
+  //   "qid": "3",
+  //   "text": "QUESTION3",
+  //   "type": "text",
+  // },
+  {
+    "qid": "2",
+    "text": "QUESTION2",
+    "type": "dropdown",
+    "options": ['yes', 'no', 'ben'],
   },
   {
-    "qid" : "3",
-    "text" : "QUESTION3",
-    "type" : "dropdown",
-    "options" : ['yes', 'no', 'maybe', 'SHANYUUU'],
+    "qid": "4",
+    "text": "QUESTION4",
+    "type": "dropdown",
+    "options": ['yes', 'no', 'maybe', 'SHANYUUU'],
   },
   {
-    "qid" : "4",
-    "text" : "QUESTION4",
-    "type" : "calendar"
+    "qid": "5",
+    "text": "QUESTION5",
+    "type": "calendar"
   },
 ];
 
@@ -54,14 +65,15 @@ export default class Home extends React.Component {
     super(props);
 
     this.state = {
-      uid: this.props.navigation.getParam('surveyId', 0),
+      loading: false,
+      uid: this.props.navigation.getParam('surveyId', null),
       currentUser: null,
       questionObject: questions,
       questionNumber: 0,
       numQuestions: questions.length,
       progressBar: 1 / questions.length,
       questions: questions,
-      answers:new Array(questions.length)
+      answers: {}
 
     };
 
@@ -69,7 +81,27 @@ export default class Home extends React.Component {
     this.responseType = this.responseType.bind(this);
     // this.handleSignOut = this.handleSignOut.bind(this);
     // this.saveMobile = this.saveMobile.bind(this);
-    this.makeOnSetValue = this.makeOnSetValue.bind(this)
+    this.makeOnSetValue = this.makeOnSetValue.bind(this);
+    this.fetchSurveyData = this.fetchSurveyData.bind(this);
+  }
+
+  componentDidMount() {
+    console.log('this.state.uid', this.state.uid)
+    if (this.state.uid !== null) {
+      this.fetchSurveyData(this.state.uid);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (Object.keys(this.state.answers).length != Object.keys(prevState.answers).length) {
+      console.log('this.state.answers', this.state.answers)
+    }
+  }
+
+  fetchSurveyData(surveyId) {
+    firebase.database().ref('/surveys/test1').once('value', function (snapshot) {
+        console.log(snapshot.val())
+    });
   }
 
   //componentDidMount() {
@@ -88,7 +120,7 @@ export default class Home extends React.Component {
   //   this.setState({
   //     uid: user.uid
   //   });
-  
+
   //}
 
   // handleSignOut = () => {
@@ -107,17 +139,21 @@ export default class Home extends React.Component {
   // }
 
   makeOnSetValue(index) {
+    const fieldName = 'field' + index;
+    // const newAnswers = 
     return (value) => {
-      this.setState(state => { 
-        let updatedAnswers = state.answers;
-        updatedAnswers[index] = value;
-        return {answers: updatedAnswers}
-      })
+      this.setState(prevState => ({
+        answers: {...prevState.answers, [fieldName]: value}
+        // let updatedAnswers = state.answers;
+        // updatedAnswers[index] = value;
+        // return { answers: updatedAnswers }
+      }))
     }
   }
 
   next() {
-    if(this.state.questionNumber + 2 <= this.state.numQuestions) {
+    // console.log('this.state.answers',this.state.answers)
+    if (this.state.questionNumber + 2 <= this.state.numQuestions) {
       this.setState({
         questionNumber: this.state.questionNumber + 1,
       });
@@ -125,15 +161,15 @@ export default class Home extends React.Component {
     this.setState({
       progressBar: (this.state.questionNumber + 2) / this.state.numQuestions
     });
-    console.log(this.state.questionNumber)
+    // console.log(this.state.questionNumber)
   }
 
   responseType(questionIndex) {
 
-    if(this.state.questions[questionIndex].type == "text") {
+    if (this.state.questions[questionIndex].type == "text") {
       return <TextComponent />
-    } else if(this.state.questions[questionIndex].type == "dropdown") {
-      return <DropdownComponent onSetValue={this.makeOnSetValue(questionIndex)} value={this.state.answers[questionIndex]} options={this.state.questions[questionIndex].options}/>
+    } else if (this.state.questions[questionIndex].type == "dropdown") {
+      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
     } else {
       return <CalendarComponent />
     }
@@ -141,37 +177,41 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.state;
-    return (
-      <View style={styles.container}>
-        <Text>Survey Id: {this.state.uid}</Text>
-        <Progress.Bar progress={this.state.progressBar} width={200} />
-        <Text>
-          {this.state.questionObject[this.state.questionNumber].text}
-        </Text>
-
-        {this.responseType(this.state.questionNumber)}
-
-        <TouchableHighlight
-          onPress={this.next}
-          style={{
-            backgroundColor: '#21ce99',
-            width: width * 0.4,
-            alignSelf: 'center',
-            height: height * 0.05,
-            borderRadius: 20,
-            justifyContent: 'center',
-            top: height * 0.02
-          }}
-        >
-          <Text style={{ color: 'white', alignSelf: 'center' }}>
-            Submit
+    const { currentUser, loading } = this.state;
+    if (loading) {
+      return <ActivityIndicator />
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>Survey Id: {this.state.uid}</Text>
+          <Progress.Bar progress={this.state.progressBar} width={200} />
+          <Text>
+            {this.state.questionObject[this.state.questionNumber].text}
           </Text>
-        </TouchableHighlight>
+
+          {this.responseType(this.state.questionNumber)}
+
+          <TouchableHighlight
+            onPress={this.next}
+            style={{
+              backgroundColor: '#21ce99',
+              width: width * 0.4,
+              alignSelf: 'center',
+              height: height * 0.05,
+              borderRadius: 20,
+              justifyContent: 'center',
+              top: height * 0.02
+            }}
+          >
+            <Text style={{ color: 'white', alignSelf: 'center' }}>
+              Submit
+          </Text>
+          </TouchableHighlight>
 
 
-      </View>
-    );
+        </View>
+      );
+    }
   }
 }
 const styles = StyleSheet.create({
