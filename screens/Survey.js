@@ -3,19 +3,6 @@ import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight, Acti
 import TextComponent from '../navigations/TextComponent';
 import DropdownComponent from '../navigations/DropdownComponent';
 import CalendarComponent from '../navigations/CalendarComponent';
-import {
-  Container,
-  Header,
-  Body,
-  Title,
-  Content,
-  Form,
-  Item,
-  Button,
-  Input,
-  Text
-} from 'native-base';
-import * as Progress from 'react-native-progress';
 import Database from '../config/database';
 import firebase from 'firebase';
 import Dimensions from 'Dimensions';
@@ -41,6 +28,7 @@ export default class Home extends React.Component {
       answers: {},
       programId: this.props.navigation.getParam('programId', null),
       date: 0,
+      fieldValidity: {}
     };
 
     this.next = this.next.bind(this);
@@ -84,13 +72,9 @@ export default class Home extends React.Component {
 
   makeOnSetValue(index) {
     const fieldName = 'field' + index;
-    // const newAnswers = 
     return (value) => {
       this.setState(prevState => ({
         answers: {...prevState.answers, [fieldName]: value}
-        // let updatedAnswers = state.answers;
-        // updatedAnswers[index] = value;
-        // return { answers: updatedAnswers }
       }))
     }
   }
@@ -99,7 +83,10 @@ export default class Home extends React.Component {
     // console.log('this.state.answers',this.state.answers)
     const { questions, questionNumber, numQuestions,answers } = this.state
     if (answers['field'+questionNumber] === '' && questions[questionNumber].mandatory === 'true') {
-      return;
+      const fieldName = 'field' + questionNumber;
+      return this.setState(prevState => ({
+        fieldValidity: {...prevState.fieldValidity, [fieldName]: value}
+      }));
     }
     if (questionNumber + 2 <= numQuestions) {
       this.setState({
@@ -126,14 +113,14 @@ export default class Home extends React.Component {
   responseType(questionIndex) {
 
     if (this.state.questions[questionIndex].type == "text") {
-      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)}/>
+      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else if (this.state.questions[questionIndex].type == "radio") {
-      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
+      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else if (this.state.questions[questionIndex].type == "date") {
       return <CalendarComponent />
     } else {
       // change this
-      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)}/>
+      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     }
 
   }
