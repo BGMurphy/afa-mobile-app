@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
-  ImageBackground
+  ImageBackground,
+  TouchableHighlight
 } from 'react-native';
 import {
   Container,
@@ -44,6 +45,7 @@ export default class Home extends React.Component {
 
     this.state = {
       currentUser: {},
+      userIsAdmin: false,
       programs: [
         {
           id: 0,
@@ -55,7 +57,7 @@ export default class Home extends React.Component {
           name: 'Aqua Vision',
           img: '...'
         }
-      ]
+      ],
     };
   }
 
@@ -63,6 +65,9 @@ export default class Home extends React.Component {
     const { currentUser } = firebase.auth();
     console.log('currentUser', currentUser);
     this.setState({ currentUser });
+    if (currentUser.email == 'admin@test.com') {
+      this.setState({userIsAdmin: true} )
+    }
   }
 
   makeSelectProgram(index) {
@@ -86,9 +91,32 @@ export default class Home extends React.Component {
     const { currentUser } = this.state;
     return (
       <View style={{ flex: 1 }}>
-        <LinearGradient colors={HeaderColor} style={styles.gradient}>
-          <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-        </LinearGradient>
+        { this.state.userIsAdmin ? (
+          <View>
+            <Text style={{ color: '#000', fontSize: 20 }}>Welcome, Admin</Text>
+            <View style={{ flexDirection: 'row'}}>
+              <View style={styles.adminSurveySelector, { backgroundColor: 'purple'}}>
+                <TouchableHighlight>
+                  <View>
+                    <Text>Aqua Vision</Text>
+
+                  </View>
+                </TouchableHighlight>
+              </View>
+              <View style={styles.adminSurveySelector, { backgroundColor: 'blue'}}>
+                <TouchableHighlight >
+                  <View>
+                    <Text>Aqua BLAST</Text>
+                  </View>
+                </TouchableHighlight>
+            </View>
+            </View>
+          </View>
+        ) : (
+        <View style={{ flex: 1 }}>
+          <LinearGradient colors={HeaderColor} style={styles.gradient}>
+            <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
+          </LinearGradient>
         <View
           style={{
             flex: 1,
@@ -188,6 +216,48 @@ export default class Home extends React.Component {
           </View>
         </View>
       </View>
+
+
+      // <View style={{ flex: 1 }}>
+      //   <Container style={styles.container}>
+      //     <LinearGradient colors={Color} style={styles.gradient}>
+      //       <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
+      //     </LinearGradient>
+      //     <View
+      //       style={{
+      //         flex: 1,
+      //         flexDirection: 'column',
+      //         justifyContent: 'center',
+      //         alignItems: 'center'
+      //       }}
+      //     >
+      //       <Text style={{ textAlign: 'center' }}>
+      //         Hi{' '}
+      //         <Text style={{ fontSize: 20, color: '#0818A8' }}>
+      //           {currentUser && currentUser.email}!
+      //         </Text>
+      //       </Text>
+
+      //       <FlatList
+      //         data={this.state.programs}
+      //         keyExtractor={(item, index) => index.toString()}
+      //         renderItem={({ item, index }) => (
+      //           <Card>
+      //             <CardItem>
+      //               <Body>
+      //                 <Text onPress={this.makeSelectProgram(index)}>
+      //                   {item.name}
+      //                 </Text>
+      //               </Body>
+      //             </CardItem>
+      //           </Card>
+      //         )}
+      //       />
+      //     </View>
+      //   </Container>
+      // </View>
+      )}
+      </View>
     );
   }
 }
@@ -221,6 +291,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: ScreenWidth - 20,
     height: ScreenHeight - 450,
-    marginBottom: 20
+    marginBottom: 20,
+    borderRadius: 20
+  },
+  adminSurveySelector: {
+    height: ScreenHeight * 0.4,
+    width: ScreenWidth * 0.4
   }
 });

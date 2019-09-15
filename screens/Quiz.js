@@ -68,7 +68,9 @@ export default class Quiz extends React.Component {
       questionText,
       onNext,
       questionNumber,
-      onPrevious
+      onPrevious,
+      isLastPage,
+      onSubmit
     } = this.props;
 
     return (

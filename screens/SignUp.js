@@ -11,7 +11,7 @@ import {
   Button,
   Text
 } from 'native-base';
-import { StyleSheet, ImageBackground, View, Image } from 'react-native';
+import { StyleSheet, ImageBackground, View, Image, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import styled from 'styled-components';
 import Dimensions from 'Dimensions';
@@ -38,10 +38,28 @@ export default class SignUp extends React.Component {
     super(props);
 
     this.state = {
+      loading: true,
       name: '',
       email: '',
-      password: ''
+      password: '',
+      logo_white:''
     };
+  }
+
+  componentDidMount() {
+    const images = firebase.storage().ref();
+    const logo_white = images.child('logo_white.png');
+    const login_background = images.child('login_background.jpg');
+    let promises = []
+    promises.push(logo_white.getDownloadURL());
+    promises.push(login_background.getDownloadURL());
+    Promise.all(promises).then(images=>{
+      this.setState({
+        logo_white: images[0],
+        login_background: images[1],
+        loading: false
+      })
+    })
   }
 
   handleSignUp = () => {
@@ -75,10 +93,11 @@ export default class SignUp extends React.Component {
   };
 
   render() {
+    if (this.state.loading) return <ActivityIndicator />
     return (
       <View style={{ flex: 1 }}>
         <ImageBackground
-          source={require('../assets/programs-aquavision.jpg')}
+          source={{uri:this.state.login_background}}
           style={styles.backgroundImg}
         >
           <LinearGradient colors={Color} style={styles.gradient}>
@@ -86,7 +105,7 @@ export default class SignUp extends React.Component {
               <View style={styles.intro}>
                 <Image
                   style={styles.logoImg}
-                  source={require('../assets/AFA_Logo_White.png')}
+                  source={{uri:this.state.logo_white}}
                 />
                 <Title style={styles.title}>Aquafit For All</Title>
                 <Text style={styles.detail}>
