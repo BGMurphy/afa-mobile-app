@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
-  ImageBackground
+  ImageBackground,
+  TouchableHighlight
 } from 'react-native';
 import {
   Container,
@@ -45,6 +46,7 @@ export default class Home extends React.Component {
 
     this.state = {
       currentUser: {},
+      userIsAdmin: true,
       programs: [
         {
           id: 0,
@@ -89,9 +91,31 @@ export default class Home extends React.Component {
     const { currentUser } = this.state;
     return (
       <View style={{ flex: 1 }}>
-        <LinearGradient colors={HeaderColor} style={styles.gradient}>
-          <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
-        </LinearGradient>
+        { this.state.userIsAdmin ? (
+          <View>
+            <Text style={{ color: '#000', fontSize: 20 }}>Welcome, Admin</Text>
+            <View style={{ flexDirection: 'row'}}>
+              <View style={styles.adminSurveySelector, { backgroundColor: 'purple'}}>
+                <TouchableHighlight >
+                  <View>
+                    <Text>Aqua Vision</Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
+              <View style={styles.adminSurveySelector, { backgroundColor: 'blue'}}>
+                <TouchableHighlight >
+                  <View>
+                    <Text>Aqua BLAST</Text>
+                  </View>
+                </TouchableHighlight>
+            </View>
+            </View>
+          </View>
+        ) : (
+        <View style={{ flex: 1 }}>
+          <LinearGradient colors={HeaderColor} style={styles.gradient}>
+            <Text style={{ color: '#fff', fontSize: 20 }}>Our Programs</Text>
+          </LinearGradient>
         <View
           style={{
             flex: 1,
@@ -150,6 +174,7 @@ export default class Home extends React.Component {
         </View>
       </View>
 
+
       // <View style={{ flex: 1 }}>
       //   <Container style={styles.container}>
       //     <LinearGradient colors={Color} style={styles.gradient}>
@@ -188,6 +213,8 @@ export default class Home extends React.Component {
       //     </View>
       //   </Container>
       // </View>
+      )}
+      </View>
     );
   }
 }
@@ -222,5 +249,9 @@ const styles = StyleSheet.create({
     height: ScreenHeight - 450,
     marginBottom: 20,
     borderRadius: 20
+  },
+  adminSurveySelector: {
+    height: ScreenHeight * 0.4,
+    width: ScreenWidth * 0.4
   }
 });
