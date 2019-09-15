@@ -72,28 +72,16 @@ export default class SettingsScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.links}>
-            Test
+            About Us
           </Text>
           <Text style={styles.links}>
-            Test
+            Research
           </Text>
           <Text style={styles.links}>
-            Test
+            Programs
           </Text>
           <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
-          </Text>
-          <Text style={styles.links}>
-            Test
+            Contact Us
           </Text>
         </View>
        

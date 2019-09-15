@@ -212,7 +212,6 @@ export default class Home extends React.Component {
           </View>
         </View>
       </View>
-<<<<<<< HEAD
 
 
       // <View style={{ flex: 1 }}>
@@ -255,8 +254,6 @@ export default class Home extends React.Component {
       // </View>
       )}
       </View>
-=======
->>>>>>> f22545819da78ad2ac86f6d2c79a239fb86c0977
     );
   }
 }
@@ -290,15 +287,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: ScreenWidth - 20,
     height: ScreenHeight - 450,
-<<<<<<< HEAD
     marginBottom: 20,
     borderRadius: 20
   },
   adminSurveySelector: {
     height: ScreenHeight * 0.4,
-    width: ScreenWidth * 0.4
-=======
+    width: ScreenWidth * 0.4,
     marginBottom: 20
->>>>>>> f22545819da78ad2ac86f6d2c79a239fb86c0977
   }
 });
