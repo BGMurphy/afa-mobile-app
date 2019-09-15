@@ -134,13 +134,13 @@ export default class Quiz extends React.Component {
         </ButtonWrapper>
         <ButtonWrapper>
           <Button
-            onPress={isLastPage? onSubmit: onNext}
+            onPress={isLastPage ? onSubmit : onNext}
             rounded
             iconRight
             light
             style={{ marginRight: 20, marginBottom: 15 }}
           >
-            <Text>{isLastPage? 'Finish':'Next'}</Text>
+            <Text>{isLastPage ? 'Finish' : 'Next'}</Text>
             <Icon name="arrow-forward" />
           </Button>
         </ButtonWrapper>

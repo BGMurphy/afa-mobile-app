@@ -66,7 +66,7 @@ export default class SignUp extends React.Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(response => {
-        this.props.navigation.navigate('App');
+        this.props.navigation.navigate('Intro');
       })
       .catch(error => {
         console.log(error.message);
