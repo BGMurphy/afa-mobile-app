@@ -74,6 +74,18 @@ export default class Home extends React.Component {
     };
   }
 
+<<<<<<< HEAD
+=======
+  selectColor(name) {
+    if(name == "Aqua Blast") {
+      return ['#0818A8', '#024FA8', '#2E96C7'];
+    } else {
+      return ['#531CBA', '#0818A8', '#024FA8'];
+    }
+  }
+
+
+>>>>>>> 839f183136035bb5e28b019784ca0b4a8f22246d
   render() {
     const { currentUser } = this.state;
     return (
@@ -117,7 +129,7 @@ export default class Home extends React.Component {
                   source={iconPaths[item.name]}
                   style={styles.img}
                 >
-                  <LinearGradient colors={Color} style={styles.gradientCard}>
+                  <LinearGradient colors={this.selectColor(item.name)} style={styles.gradientCard}>
                     <View
                       style={{
                         width: ScreenWidth - 20,
