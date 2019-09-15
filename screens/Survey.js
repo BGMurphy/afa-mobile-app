@@ -3,19 +3,6 @@ import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight, Acti
 import TextComponent from '../navigations/TextComponent';
 import DropdownComponent from '../navigations/DropdownComponent';
 import CalendarComponent from '../navigations/CalendarComponent';
-import {
-  Container,
-  Header,
-  Body,
-  Title,
-  Content,
-  Form,
-  Item,
-  Button,
-  Input,
-  Text
-} from 'native-base';
-import * as Progress from 'react-native-progress';
 import Database from '../config/database';
 import firebase from 'firebase';
 import Dimensions from 'Dimensions';
@@ -23,42 +10,6 @@ import Quiz from './Quiz';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
-
-let questions = [
-  {
-    "qid": "1",
-    "text": "QUESTION1",
-    "type": "text"
-  },
-  {
-    "qid": "2",
-    "text": "QUESTION2",
-    "type": "dropdown",
-    "options": ['yes', 'no'],
-  },
-  // {
-  //   "qid": "3",
-  //   "text": "QUESTION3",
-  //   "type": "text",
-  // },
-  {
-    "qid": "2",
-    "text": "QUESTION2",
-    "type": "dropdown",
-    "options": ['yes', 'no', 'ben'],
-  },
-  {
-    "qid": "4",
-    "text": "QUESTION4",
-    "type": "dropdown",
-    "options": ['yes', 'no', 'maybe', 'SHANYUUU'],
-  },
-  {
-    "qid": "5",
-    "text": "QUESTION5",
-    "type": "calendar"
-  },
-];
 
 // look up
 // https://github.com/oblador/react-native-progress
@@ -68,35 +19,35 @@ export default class Home extends React.Component {
 
     this.state = {
       loading: true,
-      uid: this.props.navigation.getParam('surveyId', null),
-      currentUser: null,
-      // questionObject: questions,
+      surveyId: this.props.navigation.getParam('surveyId', null),
+      currentUser: firebase.auth().currentUser,
       questionNumber: 0,
       numQuestions: 0,
       progressBar: 0,
       questions: [],
-      answers: [],
+      answers: {},
+      programId: this.props.navigation.getParam('programId', null),
+      date: 0,
+      fieldValidity: {}
     };
 
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.responseType = this.responseType.bind(this);
-    // this.handleSignOut = this.handleSignOut.bind(this);
-    // this.saveMobile = this.saveMobile.bind(this);
     this.makeOnSetValue = this.makeOnSetValue.bind(this);
     this.fetchSurveyData = this.fetchSurveyData.bind(this);
     this.handleSurveyData = this.handleSurveyData.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
-    console.log('this.state.uid', this.state.uid)
-    if (this.state.uid !== null) {
-      this.fetchSurveyData(this.state.uid);
+    if (this.state.surveyId !== null) {
+      this.fetchSurveyData(this.state.surveyId);
     }
   }
 
   fetchSurveyData(surveyId) {
-    firebase.database().ref('/surveys/test1').once('value', (snapshot) => {
+    firebase.database().ref('/surveys/'+surveyId).once('value', (snapshot) => {
       this.handleSurveyData(snapshot.val());
     });
   }
@@ -114,66 +65,35 @@ export default class Home extends React.Component {
       loading: false,
       questions: resultQuestions,
       numQuestions: resultQuestions.length,
-      progressBar: 1 / resultQuestions.length
+      progressBar: 1 / resultQuestions.length,
+      answers: {},
     })
   }
 
-  //componentDidMount() {
-  //   const { currentUser } = firebase.auth();
-  //   this.setState({ currentUser });
-  //   // Get User Credentials
-  //   let user = firebase.auth().currentUser;
-  //   // Listen for mobile number changes
-  //   Database.listenUserMobile(user.uid, mobileNumber => {
-  //     this.setState({
-  //       mobile: mobileNumber,
-  //       mobileForm: mobileNumber
-  //     });
-  //   });
-
-  //   this.setState({
-  //     uid: user.uid
-  //   });
-
-  //}
-
-  // handleSignOut = () => {
-  //   firebase
-  //     .auth()
-  //     .signOut()
-  //     .then(result => alert('sign out success'))
-  //     .catch(error => console.error(error));
-  // };
-
-  // saveMobile() {
-  //   // Set Mobile
-  //   if (this.state.uid && this.state.mobileForm) {
-  //     Database.setUserMobile(this.state.uid, this.state.mobileForm);
-  //   }
-  // }
-
   makeOnSetValue(index) {
     const fieldName = 'field' + index;
-    // const newAnswers = 
     return (value) => {
-      this.setState(state => {
-        let updatedAnswers = state.answers;
-        updatedAnswers[index] = value;
-        return { answers: updatedAnswers }
-      })
+      this.setState(prevState => ({
+        answers: {...prevState.answers, [fieldName]: value}
+      }))
     }
   }
 
   next() {
     // console.log('this.state.answers',this.state.answers)
-    if (this.state.questionNumber + 2 <= this.state.numQuestions) {
+    const { questions, questionNumber, numQuestions,answers } = this.state
+    if (answers['field'+questionNumber] === '' && questions[questionNumber].mandatory === 'true') {
+      const fieldName = 'field' + questionNumber;
+      return this.setState(prevState => ({
+        fieldValidity: {...prevState.fieldValidity, [fieldName]: value}
+      }));
+    }
+    if (questionNumber + 2 <= numQuestions) {
       this.setState({
-        questionNumber: this.state.questionNumber + 1,
+        questionNumber: questionNumber + 1,
+        progressBar: (questionNumber + 2) / numQuestions
       });
     }
-    this.setState({
-      progressBar: (this.state.questionNumber + 2) / this.state.numQuestions
-    });
     // console.log(this.state.questionNumber)
   }
 
@@ -193,22 +113,40 @@ export default class Home extends React.Component {
   responseType(questionIndex) {
 
     if (this.state.questions[questionIndex].type == "text") {
-      return <TextComponent />
+      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     } else if (this.state.questions[questionIndex].type == "radio") {
-      return <DropdownComponent value={this.state.answers[questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
-    } else {
+      return <DropdownComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} validity={this.state.fieldValidity['field'+questionIndex]||true} />
+    } else if (this.state.questions[questionIndex].type == "date") {
       return <CalendarComponent />
+    } else {
+      // change this
+      return <TextComponent value={this.state.answers['field'+questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} validity={this.state.fieldValidity['field'+questionIndex]||true} />
     }
 
   }
 
+  onSubmit() {
+    console.log('this.state.currentUser', this.state.currentUser);
+    const {answers,currentUser,programId, surveyId} = this.state;
+    let dataToSend = {...answers, user: currentUser.email, programId, surveyId};
+    firebase.database().ref('responses/').push(dataToSend).then((data)=>{
+        //success callback
+        console.log('data ' , data);
+        this.props.navigation.navigate('Tab', {surveyFinish: true})
+    }).catch((error)=>{
+        //error callback
+        console.log('error ' , error)
+    })
+    // console.log('dataToSend', dataToSend)
+  }
+
   render() {
-    const { currentUser, loading, progressBar, questionNumber, questions } = this.state;
+    const { currentUser, loading, progressBar, questionNumber, questions, numQuestions } = this.state;
     if (loading) {
       return <ActivityIndicator />
     } else {
       return (
-          <Quiz progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next} onPrevious={this.previous}>
+          <Quiz isLastPage={questionNumber +2 > numQuestions} progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next} onPrevious={this.previous} onSubmit={this.onSubmit}>
 
             {this.responseType(questionNumber)}
 
@@ -236,17 +174,4 @@ export default class Home extends React.Component {
     }
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'lavender',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  signOutButton: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    width: '90%'
-  }
-});
+

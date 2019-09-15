@@ -33,9 +33,8 @@ let ScreenHeight = Dimensions.get('window').height;
 let ScreenWidth = Dimensions.get('window').width;
 
 const iconPaths = {
-  "Aqua Blast": require('../assets/programs-aquablast.jpg'),
-  "Aqua Vision": require('../assets/programs-aquavision.jpg')
-
+  'Aqua Blast': require('../assets/programs-aquablast.jpg'),
+  'Aqua Vision': require('../assets/programs-aquavision.jpg')
 };
 
 // look up
@@ -66,7 +65,6 @@ export default class Home extends React.Component {
     const { currentUser } = firebase.auth();
     console.log('currentUser', currentUser);
     this.setState({ currentUser });
-
   }
 
   makeSelectProgram(index) {
@@ -79,13 +77,12 @@ export default class Home extends React.Component {
   }
 
   selectColor(name) {
-    if(name == "Aqua Blast") {
+    if (name == 'Aqua Blast') {
       return ['#0818A8', '#024FA8', '#2E96C7'];
     } else {
       return ['#531CBA', '#0818A8', '#024FA8'];
     }
   }
-
 
   render() {
     const { currentUser } = this.state;
@@ -145,34 +142,77 @@ export default class Home extends React.Component {
             </Text>
 
             <FlatList
+              style={{ top: '5%' }}
               data={this.state.programs}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
-                <ImageBackground
-                  source={iconPaths[item.name]}
-                  style={styles.img}
+                <TouchableOpacity
+                  onPress={this.makeSelectProgram(index)}
+                  activeOpacity={0.8}
                 >
-                  <LinearGradient colors={this.selectColor(item.name)} style={styles.gradientCard}>
-                    <View
-                      style={{
-                        width: ScreenWidth - 20,
-                        height: ScreenHeight - 450,
-
-                        marginBottom: 20,
-                        borderRadius: 20
-                      }}
+                  <ImageBackground
+                    source={iconPaths[item.name]}
+                    imageStyle={{ borderRadius: 20, opacity: 0.5 }}
+                    style={styles.img}
+                  >
+                    <LinearGradient
+                      colors={this.selectColor(item.name)}
+                      style={styles.gradientCard}
                     >
-                      <Text onPress={this.makeSelectProgram(index)}>
-                        {item.name}
-                      </Text>
-                    </View>
-                  </LinearGradient>
-                </ImageBackground>
+                      <View
+                        style={{
+                          width: ScreenWidth - 20,
+                          height: ScreenHeight - 470,
+                          marginBottom: 20,
+                          borderRadius: 20
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 25,
+                            paddingLeft: 15,
+                            paddingTop: 15,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 18,
+                            paddingLeft: 15,
+                            paddingTop: 15
+                          }}
+                        >
+                          Aqua BLAST project aims to improve physical activity
+                          and social connections for stroke survivors in the
+                          Lower Mainland.
+                        </Text>
+                        <Button
+                          rounded
+                          style={{
+                            backgroundColor: '#EFB215',
+                            width: '65%',
+                            zIndex: 200,
+                            marginLeft: '30%',
+                            opacity: 1
+                          }}
+                          onPress={this.makeSelectProgram(index)}
+                        >
+                          <Text>Click here to start survey!!</Text>
+                        </Button>
+                      </View>
+                    </LinearGradient>
+                  </ImageBackground>
+                </TouchableOpacity>
               )}
             />
           </View>
         </View>
       </View>
+<<<<<<< HEAD
 
 
       // <View style={{ flex: 1 }}>
@@ -215,6 +255,8 @@ export default class Home extends React.Component {
       // </View>
       )}
       </View>
+=======
+>>>>>>> f22545819da78ad2ac86f6d2c79a239fb86c0977
     );
   }
 }
@@ -244,14 +286,19 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   img: {
+    borderRadius: 20,
     resizeMode: 'contain',
     width: ScreenWidth - 20,
     height: ScreenHeight - 450,
+<<<<<<< HEAD
     marginBottom: 20,
     borderRadius: 20
   },
   adminSurveySelector: {
     height: ScreenHeight * 0.4,
     width: ScreenWidth * 0.4
+=======
+    marginBottom: 20
+>>>>>>> f22545819da78ad2ac86f6d2c79a239fb86c0977
   }
 });

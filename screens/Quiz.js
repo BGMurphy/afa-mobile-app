@@ -33,14 +33,16 @@ const ProgressBarWrapper = styled.View`
 const QuestionWrapper = styled.View`
   position: absolute;
   top: 10%;
-  width: 100%;
+  width: 90%;
   height: 30%;
+  margin-bottom: 5%;
 `;
 
 const Question = styled.Text`
   padding-left: 15px;
   font-size: 20px;
-  text-align: center;
+  color: #fff;
+  margin-bottom: 5%;
 `;
 
 const ContentWrapper = styled.View`
@@ -60,63 +62,65 @@ const ButtonWrapper = styled.View`
 
 export default class Quiz extends React.Component {
   render() {
-    const {children, progress, questionText,onNext,questionNumber,onPrevious} = this.props;
+    const {
+      children,
+      progress,
+      questionText,
+      onNext,
+      questionNumber,
+      onPrevious,
+      isLastPage,
+      onSubmit
+    } = this.props;
 
     return (
       <React.Fragment>
-        <ProgressBarWrapper
-          style={{ backgroundColor: '#EAA5BA', justifyContent: 'center' }}
-        >
+        <ProgressBarWrapper style={{ justifyContent: 'center' }}>
           <Progress.Bar progress={progress} width={width} />
-
         </ProgressBarWrapper>
 
         <View
           style={{
             top: '10%',
             flex: 1,
-            flexDiection: 'column',
-            backgroundColor: 'lightblue'
+            flexDiection: 'column'
           }}
         >
-          <QuestionWrapper
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingLeft: 15
-            }}
+          <ImageBackground
+            source={require('../assets/bg2.jpg')}
+            style={{ flex: 1 }}
           >
-            <View style={styles.circle}>
-              <Text style={{ fontSize: 25 }}>{questionNumber + 1}</Text>
-            </View>
-            <Question>{questionText}</Question>
-          </QuestionWrapper>
+            <LinearGradient colors={Color} style={styles.gradient}>
+              <QuestionWrapper
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingLeft: 15,
+                  textAlign: 'center',
+                  flexWrap: 'wrap'
+                }}
+              >
+                <View style={styles.circle}>
+                  <Text style={{ fontSize: 25, color: '#0818A8' }}>
+                    {questionNumber + 1}
+                  </Text>
+                </View>
+                <Question style={{ textAlign: 'center', flexWrap: 'wrap' }}>
+                  {questionText}
+                </Question>
+              </QuestionWrapper>
+            </LinearGradient>
+          </ImageBackground>
         </View>
         <ContentWrapper
           style={{
-            backgroundColor: 'lavender',
+            backgroundColor: '#fff',
             borderWidth: 0.5,
             borderColor: '#d6d7da',
             borderRadius: 10
           }}
         >
           {children}
-          {/* <Calendar
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            markedDates={{
-              '2019-09-15': {
-                selected: true,
-                selectedColor: '#2E96C7'
-              }
-            }}
-            style={{
-              borderWidth: 0.5,
-              borderColor: '#d6d7da',
-              borderRadius: 10
-            }}
-          /> */}
         </ContentWrapper>
         <ButtonWrapper>
           <Button
@@ -132,13 +136,13 @@ export default class Quiz extends React.Component {
         </ButtonWrapper>
         <ButtonWrapper>
           <Button
-            onPress={onNext}
+            onPress={isLastPage? onSubmit: onNext}
             rounded
             iconRight
             light
             style={{ marginRight: 20, marginBottom: 15 }}
           >
-            <Text>Next</Text>
+            <Text>{isLastPage? 'Finish':'Next'}</Text>
             <Icon name="arrow-forward" />
           </Button>
         </ButtonWrapper>
@@ -149,12 +153,19 @@ export default class Quiz extends React.Component {
 
 const styles = StyleSheet.create({
   circle: {
-    width: 80,
-    height: 80,
+    width: 50,
+    height: 50,
     borderRadius: 100 / 2,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     top: 10
+  },
+  gradient: {
+    opacity: 0.8,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
