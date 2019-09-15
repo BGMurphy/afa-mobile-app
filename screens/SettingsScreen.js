@@ -180,7 +180,9 @@ const styles = StyleSheet.create({
     paddingBottom: height * 0.02,
     paddingTop: height * 0.02,
     fontWeight: 'bold',
-    color: '#000',
+    color: 'white',
+    textShadowColor:'black',
+    textShadowRadius:15,
 
     marginRight: 15,
     marginLeft: 15
