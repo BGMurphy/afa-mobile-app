@@ -22,7 +22,7 @@ let width = Dimensions.get('window').width;
 
 // look up
 // https://github.com/oblador/react-native-progress
-export default class TextComponent extends React.Component {
+export default class SliderComponent extends React.Component {
   static defaultProps = {
     value:""
   }
@@ -34,6 +34,8 @@ export default class TextComponent extends React.Component {
     });
     return (
       <View>
+
+        <Text>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</Text>
         
         <Picker
           selectedValue={this.props.value}
