@@ -118,7 +118,7 @@ export default class Quiz extends React.Component {
             backgroundColor: '#fff',
             borderWidth: 0.5,
             borderColor: '#d6d7da',
-            borderRadius: 10
+            borderRadius: 10,
           }}
         >
           {children}

@@ -30,7 +30,7 @@ export default class TextComponent extends React.Component {
       <View>
         
         <TextInput
-          style={{height: 40}}
+          style={{height: 40, left: 10}}
           placeholder="Please enter your answer"
           onChangeText={text => onSetValue(text)}
           value={value}
