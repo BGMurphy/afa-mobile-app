@@ -15,7 +15,7 @@ export default class CalendarScreen extends React.Component {
         <Text>Please select the date of the session you attended.</Text>
         <Calendar
             onDayPress={day => {
-              this.props.navigation.navigate('Survey', {surveyId: 0});
+              this.props.navigation.navigate('Survey', {surveyId: 'test1', programId: 'programId'});
             }}
             markedDates={{
               '2019-09-15': {
