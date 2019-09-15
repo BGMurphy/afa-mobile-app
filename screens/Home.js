@@ -304,7 +304,12 @@ export default class Home extends React.Component {
           </View>
         ) : (
           <View style={{ flex: 1 }}>
-            <Header style={{ backgroundColor: '#0818A8' }}>
+            <Header
+              style={{
+                backgroundColor: '#0818A8',
+                marginTop: ScreenHeight * 0.04
+              }}
+            >
               <Text style={{ color: '#fff', fontSize: 20, paddingTop: 10 }}>
                 Our Programs
               </Text>
@@ -396,7 +401,7 @@ export default class Home extends React.Component {
                                 zIndex: 200,
                                 marginLeft: '30%',
                                 opacity: 1,
-                                marginTop: 30
+                                marginTop: 20
                               }}
                               onPress={this.makeSelectProgram(index)}
                             >
