@@ -10,7 +10,16 @@ export default class CalendarScreen extends React.Component {
     const programId = navigation.getParam('programId', 'noProgramId');
     return (
       <View style={styles.container}>
-        <Text>Please select the date of the session you attended.</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            marginBottom: 15,
+            marginRight: 15,
+            marginLeft: 15
+          }}
+        >
+          Please select the date of the session you attended.
+        </Text>
         <Calendar
           onDayPress={day => {
             this.props.navigation.navigate('Survey', {

@@ -118,7 +118,7 @@ export default class Quiz extends React.Component {
             backgroundColor: '#fff',
             borderWidth: 0.5,
             borderColor: '#d6d7da',
-            borderRadius: 10,
+            borderRadius: 20
           }}
         >
           {children}
@@ -129,9 +129,16 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: width*0.565, marginBottom: 15, backgroundColor: 'blue' }}
+            style={{
+              marginRight: width * 0.565,
+              marginBottom: 15,
+              backgroundColor: '#0818A8'
+            }}
           >
-            <Icon name="arrow-back" style={{paddingLeft: 10}} />
+            <Icon
+              name="arrow-back"
+              style={{ paddingLeft: 10, color: '#fff' }}
+            />
             <Text>Previous</Text>
           </Button>
         </ButtonWrapper>
@@ -141,10 +148,14 @@ export default class Quiz extends React.Component {
             rounded
             iconRight
             light
-            style={{ marginRight: 20, marginBottom: 15, backgroundColor: 'blue' }}
+            style={{
+              marginRight: 20,
+              marginBottom: 15,
+              backgroundColor: '#0818A8'
+            }}
           >
             <Text>{isLastPage ? 'Finish' : 'Next'}</Text>
-            <Icon name="arrow-forward" />
+            <Icon name="arrow-forward" style={{ color: '#fff' }} />
           </Button>
         </ButtonWrapper>
       </React.Fragment>
@@ -154,8 +165,8 @@ export default class Quiz extends React.Component {
 
 const styles = StyleSheet.create({
   circle: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 100 / 2,
     backgroundColor: '#fff',
     alignItems: 'center',

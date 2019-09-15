@@ -341,7 +341,8 @@ export default class Home extends React.Component {
                                 width: '65%',
                                 zIndex: 200,
                                 marginLeft: '30%',
-                                opacity: 1
+                                opacity: 1,
+                                marginTop: 30
                               }}
                               onPress={this.makeSelectProgram(index)}
                             >

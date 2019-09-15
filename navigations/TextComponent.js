@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput, TouchableHighlight } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  TouchableHighlight
+} from 'react-native';
 import {
   Container,
   Header,
@@ -19,23 +25,19 @@ import Dimensions from 'Dimensions';
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
-
 // look up
 // https://github.com/oblador/react-native-progress
 export default class TextComponent extends React.Component {
-
   render() {
     const { value, onSetValue } = this.props;
     return (
       <View>
-        
         <TextInput
-          style={{height: 40, left: 10}}
+          style={{ height: 40, left: 10, fontSize: 20 }}
           placeholder="Please enter your answer"
           onChangeText={text => onSetValue(text)}
           value={value}
         />
-
       </View>
     );
   }
