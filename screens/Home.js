@@ -6,7 +6,8 @@ import {
   TextInput,
   FlatList,
   ImageBackground,
-  TouchableHighlight
+  TouchableHighlight,
+  ScrollView
 } from 'react-native';
 import {
   Container,
@@ -61,8 +62,11 @@ export default class Home extends React.Component {
       ],
       surveyCounts: {
         aquaVison: 0,
-        aquaBlast: 0
-      }
+        aquaBlast: 0,
+        visionResponses: [],
+        blastResponses: []
+      },
+      adminDataView: []
     };
     this.fetchResponseData = this.fetchResponseData.bind(this);
     this.handleResponseData = this.handleResponseData.bind(this);
@@ -110,19 +114,26 @@ export default class Home extends React.Component {
   getResponseCounts(responses) {
     let visionCount = 0;
     let blastCount = 0;
+    let visionResponses = [];
+    let blastResponses = []
     for (let responseKey in responses) {
       if (responses[responseKey].programId == 'program1') {
         visionCount += 1;
+        visionResponses.push(responses[responseKey]);
       }
       if (responses[responseKey].programId == 'program2') {
         blastCount += 1;
+        blastResponses.push(responses[responseKey]);
       }
     }
     //console.log('Counts:', visionCount, blastCount);
+    console.log('Responses:', visionResponses, blastResponses);
     this.setState({
       surveyCounts: {
         visionCount: visionCount,
-        blastCount: blastCount
+        blastCount: blastCount,
+        visionResponses: visionResponses,
+        blastResponses: blastResponses
       }
     });
   }
@@ -166,7 +177,12 @@ export default class Home extends React.Component {
               }}
             >
               <View style={styles.adminSurveySelector}>
-                <TouchableHighlight>
+                <TouchableHighlight
+                  onPress={() => {
+                    console.log('AV Press');
+                    this.setState({adminDataView: this.state.surveyCounts.visionResponses})
+                  }}
+                  >
                   <LinearGradient
                     colors={['#531CBA', '#0818A8', '#024FA8']}
                     style={styles.box}
@@ -206,7 +222,12 @@ export default class Home extends React.Component {
                 </Button>
               </View>
               <View style={styles.adminSurveySelector}>
-                <TouchableHighlight>
+                <TouchableHighlight
+                  onPress={() => {
+                    console.log('Blast Press');
+                    this.setState({adminDataView: this.state.surveyCounts.blastResponses})
+                  }}
+                >
                   <LinearGradient
                     colors={['#0818A8', '#024FA8', '#2E96C7']}
                     style={styles.box}
@@ -246,6 +267,18 @@ export default class Home extends React.Component {
                 </Button>
               </View>
             </View>
+            <ScrollView style={{backgroundColor: '#eee'}}>
+              <FlatList
+                style={{ top: '5%' }}
+                data={this.state.adminDataView}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                  <TouchableHighlight style={{backgroundColor: '#2E96C7', margin: 5, borderRadius: 5}}>
+                    <Text>Response {index + 1}: {item.user}</Text>
+                  </TouchableHighlight>
+                )}
+              />
+            </ScrollView>
           </View>
         ) : (
           <View style={{ flex: 1 }}>
