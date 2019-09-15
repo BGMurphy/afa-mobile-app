@@ -19,6 +19,8 @@ import * as Progress from 'react-native-progress';
 import Database from '../config/database';
 import firebase from 'firebase';
 import Dimensions from 'Dimensions';
+import Quiz from './Quiz';
+
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
@@ -95,7 +97,7 @@ export default class Home extends React.Component {
   handleSurveyData(survey) {
     const pages = survey.surveyData;
     const questions = [];
-    pages.map(page=>{
+    pages.map(page => {
       const questions = page.questions;
       for (let key in questions) {
         questions.push(questions[key])
@@ -105,7 +107,7 @@ export default class Home extends React.Component {
       loading: false,
       questions,
       numQuestions: questions.length,
-      progressBar: 1 /questions.length
+      progressBar: 1 / questions.length
     })
   }
 
@@ -128,7 +130,7 @@ export default class Home extends React.Component {
       loading: false,
       questions: resultQuestions,
       numQuestions: resultQuestions.length,
-      progressBar: 1 /resultQuestions.length
+      progressBar: 1 / resultQuestions.length
     })
   }
 
@@ -195,7 +197,7 @@ export default class Home extends React.Component {
 
     if (this.state.questions[questionIndex].type == "text") {
       return <TextComponent />
-    } else if (this.state.questions[questionIndex].type == "dropdown") {
+    } else if (this.state.questions[questionIndex].type == "radio") {
       return <DropdownComponent value={this.state.answers[questionIndex] || ''} onSetValue={this.makeOnSetValue(questionIndex)} options={this.state.questions[questionIndex].options} />
     } else {
       return <CalendarComponent />
@@ -204,39 +206,35 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { currentUser, loading } = this.state;
+    const { currentUser, loading, progressBar, questionNumber, questions } = this.state;
     if (loading) {
       return <ActivityIndicator />
     } else {
       return (
-        <View style={styles.container}>
-          <Text>Survey Id: {this.state.uid}</Text>
-          <Progress.Bar progress={this.state.progressBar} width={200} />
-          <Text>
-            {this.state.questions[this.state.questionNumber].text}
-          </Text>
+          <Quiz progress={progressBar} questionNumber={questionNumber} questionText={questions[questionNumber].text} onNext={this.next}>
 
-          {this.responseType(this.state.questionNumber)}
+            {this.responseType(questionNumber)}
 
-          <TouchableHighlight
-            onPress={this.next}
-            style={{
-              backgroundColor: '#21ce99',
-              width: width * 0.4,
-              alignSelf: 'center',
-              height: height * 0.05,
-              borderRadius: 20,
-              justifyContent: 'center',
-              top: height * 0.02
-            }}
-          >
-            <Text style={{ color: 'white', alignSelf: 'center' }}>
-              Submit
-          </Text>
-          </TouchableHighlight>
+            {/* <TouchableHighlight
+              onPress={this.next}
+              style={{
+                backgroundColor: '#21ce99',
+                width: width * 0.4,
+                alignSelf: 'center',
+                height: height * 0.05,
+                borderRadius: 20,
+                justifyContent: 'center',
+                top: height * 0.02
+              }}
+            >
+              <Text style={{ color: 'white', alignSelf: 'center' }}>
+                Submit
+            </Text>
+            </TouchableHighlight> */}
+          </Quiz>
 
 
-        </View>
+
       );
     }
   }
