@@ -298,6 +298,8 @@ const styles = StyleSheet.create({
   },
   adminSurveySelector: {
     height: ScreenHeight * 0.4,
+    width: ScreenWidth * 0.4,
+    marginBottom: 20,
     width: ScreenWidth * 0.4
   }
 });
