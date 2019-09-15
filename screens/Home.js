@@ -31,6 +31,12 @@ const Color = ['#531CBA', '#0818A8', '#024FA8'];
 let ScreenHeight = Dimensions.get('window').height;
 let ScreenWidth = Dimensions.get('window').width;
 
+const iconPaths = {
+  "Aqua Blast": require('../assets/programs-aquablast.jpg'),
+  "Aqua Vision": require('../assets/programs-aquavision.jpg')
+
+};
+
 // look up
 // https://github.com/oblador/react-native-progress
 export default class Home extends React.Component {
@@ -58,6 +64,7 @@ export default class Home extends React.Component {
     const { currentUser } = firebase.auth();
     console.log('currentUser', currentUser);
     this.setState({ currentUser });
+
   }
 
   makeSelectProgram(index) {
@@ -68,6 +75,8 @@ export default class Home extends React.Component {
       });
     };
   }
+
+
 
   render() {
     const { currentUser } = this.state;
@@ -109,7 +118,7 @@ export default class Home extends React.Component {
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
                 <ImageBackground
-                  source={require('../assets/programs-aquavision.jpg')}
+                  source={iconPaths[item.name]}
                   style={styles.img}
                 >
                   <LinearGradient colors={Color} style={styles.gradientCard}>
