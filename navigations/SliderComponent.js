@@ -13,6 +13,7 @@ import {
   Text
 } from 'native-base';
 import * as Progress from 'react-native-progress';
+import StarRating from 'react-native-star-rating';
 import Database from '../config/database';
 import firebase from 'firebase';
 import Dimensions from 'Dimensions';
@@ -24,26 +25,25 @@ let width = Dimensions.get('window').width;
 // https://github.com/oblador/react-native-progress
 export default class SliderComponent extends React.Component {
   static defaultProps = {
-    value:""
+    value:0
   }
 
   render() {
-    console.log(this.props.options)
-    let options = this.props.options.map( (s, i) => {
-      return <Picker.Item key={i} value={s} label={s} />
-    });
     return (
       <View>
 
-        <Text>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</Text>
-        
-        <Picker
-          selectedValue={this.props.value}
-          onValueChange={ (service) => ( this.props.onSetValue(service) ) } >
-
-          {options}
-
-        </Picker>
+        <StarRating
+          starSize={20}
+          containerStyle={{margin:15}}
+          disabled={false}
+          emptyStar={'circle-thin'}
+          fullStar={'circle'}
+          iconSet={'FontAwesome'}
+          maxStars={this.props.size}
+          rating={this.props.value}
+          selectedStar={(rating) => this.props.onSetValue(rating)}
+          fullStarColor={'#0818A8'}
+        />
 
       </View>
     );
