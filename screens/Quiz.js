@@ -18,6 +18,7 @@ import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import * as Progress from 'react-native-progress';
 import styled from 'styled-components';
 import Dimensions from 'Dimensions';
+import firebase from 'firebase';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -62,6 +63,27 @@ const ButtonWrapper = styled.View`
 `;
 
 export default class Quiz extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true
+    };
+  }
+
+  componentDidMount() {
+    const images = firebase.storage().ref();
+    const login_background = images.child('bg2.jpg');
+    let promises = [];
+    promises.push(login_background.getDownloadURL());
+    Promise.all(promises).then(images => {
+      this.setState({
+        login_background: images[0],
+        loading: false
+      });
+    });
+  }
+
   render() {
     const {
       children,
@@ -88,7 +110,8 @@ export default class Quiz extends React.Component {
           }}
         >
           <ImageBackground
-            source={require('../assets/bg2.jpg')}
+            // source={require('../assets/bg2.jpg')}
+            source={{ uri: this.state.login_background }}
             style={{ flex: 1 }}
           >
             <LinearGradient colors={Color} style={styles.gradient}>
